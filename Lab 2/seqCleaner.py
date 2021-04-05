@@ -1,6 +1,6 @@
 #!/usr/bin/env python3 
-# Name: Your full name  
-# Group Members: List full names or “None”
+# Name: Derfel Terciano (dtercian) 
+# Group Members: None
 
 '''
 Read a DNA string from user input and return a collapsed substring of embedded Ns to: {count}.
