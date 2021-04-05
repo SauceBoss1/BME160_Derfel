@@ -3,6 +3,7 @@
 # Group Members: None
 
 '''
+Logistics: make sure it contain docstrings and specific line or block comments that explain the semantics of your implementation.
 Read a DNA string from user input and return a collapsed substring of embedded Ns to: {count}.
 
 Example: 
@@ -18,7 +19,12 @@ class DNAstring (str):
     
     def purify(self):
         ''' Return an upcased version of the string, collapsing a single run of Ns.'''
-        return "this is empty" #edit this as well
+        upperString = self.upper()
+        firstInstanceOfN = upperString.index('N')
+        counter = upperString.count('N')
+        upperString = upperString.replace('N','')
+        upperString = upperString[:firstInstanceOfN] + '{' + f'{counter}' + '}' +upperString[firstInstanceOfN:]
+        return upperString
     
 def main():
     ''' Get user DNA data and clean it up.'''
