@@ -14,11 +14,11 @@ Any lower case letters are converted to uppercase
 
 class DNAstring (str):
     def length (self):
-        return (length(self))
+        return (self.length())
     
     def purify(self):
         ''' Return an upcased version of the string, collapsing a single run of Ns.'''
-        pass # this is just a placeholder, so dont leave "pass" here
+        return "this is empty"
     
 def main():
     ''' Get user DNA data and clean it up.'''
