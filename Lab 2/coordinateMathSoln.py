@@ -72,8 +72,24 @@ class Triad :
         """ Provides the angle made at point r by segments rp and rq (radians). """
         return math.acos(self.ndot(self.p,self.r,self.q) /  math.sqrt(self.d2(self.p,self.r)*self.d2(self.q,self.r)))
 
+
+def convertToCoordinates (coordInput):
+    coordInput = coordInput.replace(' ','').replace('(','').replace(')','')
+    coordInput = coordInput.replace('C=', '').replace('N=', '!').replace('Ca=', '!')
+    coordInput = coordInput.split('!')
+    coordC = list(map(float,coordInput[0].split(',')))
+    coordN = list(map(float,coordInput[1].split(',')))
+    coordCa = list(map(float,coordInput[2].split(',')))
+    return coordC, coordN, coordCa
+
+
 def main():
-    ''' Function docstring goes here'''
-    pass
+    coordInput = input('Enter coordinates: ')
+    p,q,r = convertToCoordinates(coordInput)
+    bondInfo = Triad(p,q,r)
+    ncBondLength = 'N-C bond length = ' +f'{bondInfo.dPQ():.3}\n'
+    ncaBondLength = 'N-Ca bond length = ' + f'{bondInfo.dPR():.3}\n'
+    cNCaBondAngle = 'C-N-Ca bond angle = ' +f'{float(math.degrees(bondInfo.angleQ())):.4}'
+    print (f'{ncBondLength}{ncaBondLength}{cNCaBondAngle}')
 
 main()
