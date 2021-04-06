@@ -42,7 +42,6 @@ dnaCodonTable = {key.replace('U','T'):value for key, value in RNA_codon_table.it
 
 def nucInterpreter (inputString):
     '''This function determins the correct dictionary output based on what input is given'''
-    inputString = inputString.upper() #Completely unnecessary but just in case a lowercased input is given
     if inputString.isupper() & ('T' in inputString): #DNA codon
         return f'{inputString} = ' + f'{dnaCodonTable.get(inputString,"unknown").upper()}'
     elif inputString.isupper() & ('U' in inputString): #RNA codon
