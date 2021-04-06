@@ -3,7 +3,21 @@
 # Group Members: None
 
 '''
-Program docstring goes here
+coordinateMathSoln.py
+This program takes in three sets of atomic coordinates, all provided on a single line. The program then calculates and returns the bond lengths and angles.
+
+Example:
+    -input: C = (39.447, 94.657, 11.824) N = (39.292, 95.716, 11.027) Ca = (39.462, 97.101, 11.465)
+    -output: 
+        N-C bond length = 1.33
+        N-Ca bond length = 1.46
+        C-N-Ca bond angle = 124.0 (in degrees)
+
+Assumptions:
+    -the input for the three coordinates are in the following order and uses only the following characters : C N Ca
+    -all numbers are floats and all outputs are floats only
+    -Each coordinate will contain only 3 numeric values.
+    -all inputs will be formatted exactly like how the example input is 
 '''
 
 import math
@@ -74,22 +88,51 @@ class Triad :
 
 
 def convertToCoordinates (coordInput):
-    coordInput = coordInput.replace(' ','').replace('(','').replace(')','')
-    coordInput = coordInput.replace('C=', '').replace('N=', '!').replace('Ca=', '!')
-    coordInput = coordInput.split('!')
+    '''This function converts the string of inputs into 3 lists of floats that the Triad class can then use'''
+    '''
+    input: a string
+    output: 3 float lists
+    '''
+    coordInput = coordInput.replace(' ','').replace('(','').replace(')','') # removes any unnecessary data like spaces and parenthesis
+
+    # the following line removes all idenitfiers and replaces 'N=' and 'Ca=' with ':' (Any unique character that isn't related to the string input will work)
+    # I used the approach of inserting unique character because I need to eventually split the string into a 3-element list that
+    #   correspond to the triad class inputs
+    coordInput = coordInput.replace('C=', '').replace('N=', ':').replace('Ca=', ':')
+    # using the example string above, the current result would look like the following string (keep in mind, the following is still one string):
+    #   '39.447, 94.657, 11.824:39.292, 95.716, 11.027:39.462, 97.101, 11.465'
+
+    # I create the 3-element list in the below line where each element will correspond to the a certain input of the Triad class
+    coordInput = coordInput.split(':')
+    # now the example string would look like the following 3-element list:
+    #   ['39.447, 94.657, 11.824','39.292, 95.716, 11.027','39.462, 97.101, 11.465']
+
+
+    # the 3 lines below turns each element into its own individual list and is then formatted into a float
+    # in terms of the triad class inputs: coordC = p, coordN = q, coordCa = r
     coordC = list(map(float,coordInput[0].split(',')))
     coordN = list(map(float,coordInput[1].split(',')))
     coordCa = list(map(float,coordInput[2].split(',')))
+
     return coordC, coordN, coordCa
 
 
 def main():
+    '''asks for 3 atomic coordinates and outputs bond lengths and angles'''
+    '''
+        -input: string
+        -outputs: bond lengths and bond angles
+    '''
     coordInput = input('Enter coordinates: ')
-    p,q,r = convertToCoordinates(coordInput)
-    bondInfo = Triad(p,q,r)
+
+    p,q,r = convertToCoordinates(coordInput) #since the convertToCoordinates function returns 3 lists, 3 names are assigned simultaneously to the function 
+    bondInfo = Triad(p,q,r) #the Triad class is constructed
+
+    # the 3 lines below formats the calculations to the correst number of sig figs 
     ncBondLength = 'N-C bond length = ' +f'{bondInfo.dPQ():.3}\n'
     ncaBondLength = 'N-Ca bond length = ' + f'{bondInfo.dPR():.3}\n'
-    cNCaBondAngle = 'C-N-Ca bond angle = ' +f'{float(math.degrees(bondInfo.angleQ())):.4}'
-    print (f'{ncBondLength}{ncaBondLength}{cNCaBondAngle}')
+    nBondAngle = 'C-N-Ca bond angle = ' +f'{float(math.degrees(bondInfo.angleQ())):.4}'
+
+    print (f'{ncBondLength}{ncaBondLength}{nBondAngle}') #prints results of calculations
 
 main()
