@@ -1,6 +1,6 @@
 #!/usr/bin/env python3 
-# Name: Your full name
-# Group Members: List full names or “None”
+# Name: Derfel Terciano (dtercian)
+# Group Members: None
 
 '''
 Program docstring goes here
