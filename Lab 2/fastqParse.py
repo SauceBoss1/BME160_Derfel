@@ -1,7 +1,8 @@
 #!/usr/bin/env python3 
 # Name: Derfel Terciano (dtercian)
 # Group Members: None
-'''Sequence information parsing
+'''
+Sequence information parsing
 In this exercise, you will create a program to “parse” sequence name information from a single line of a FASTQ formatted file. Your task is to create a Python script called fastqParse that:
 
 asks for and collects the seqname line of a FASTQ file using input()
