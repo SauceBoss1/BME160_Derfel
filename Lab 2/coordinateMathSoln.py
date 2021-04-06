@@ -130,7 +130,7 @@ def main():
 
     # the 3 lines below formats the calculations to the correst number of sig figs 
     ncBondLength = 'N-C bond length = ' +f'{bondInfo.dPQ():.3}\n'
-    ncaBondLength = 'N-Ca bond length = ' + f'{bondInfo.dPR():.3}\n'
+    ncaBondLength = 'N-Ca bond length = ' + f'{bondInfo.dQR():.3}\n'
     nBondAngle = 'C-N-Ca bond angle = ' +f'{float(math.degrees(bondInfo.angleQ())):.4}'
 
     print (f'{ncBondLength}{ncaBondLength}{nBondAngle}') #prints results of calculations
