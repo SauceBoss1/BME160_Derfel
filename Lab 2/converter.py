@@ -40,14 +40,14 @@ RNA_codon_table = {
 }
 dnaCodonTable = {key.replace('U','T'):value for key, value in RNA_codon_table.items()}
 
-def nucInterpreter (inputString):
+def codonInterpreter (inputString):
     '''This function determins the correct dictionary output based on what input is given'''
     if inputString.isupper() & ('T' in inputString): #DNA codon
         return f'{inputString} = ' + f'{dnaCodonTable.get(inputString,"unknown").upper()}'
     elif inputString.isupper() & ('U' in inputString): #RNA codon
         return f'{inputString} = ' + f'{RNA_codon_table.get(inputString,"unknown").upper()}'
     elif len(inputString)==3: #Short AA
-        return f'{inputString} = ' + f'{short_AA.get(inputString,"unknown")}'
+        return f'{inputString} = ' + f'{short_AA.get(inputString.upper(),"unknown")}'
     elif len(inputString)==1: #long AA
         return f'{inputString} = ' + f'{long_AA.get(inputString,"unknown")}'
     else:
@@ -55,6 +55,6 @@ def nucInterpreter (inputString):
 
 def main():
     ''' Function docstring goes here'''
-    print(nucInterpreter(input('Enter String: ')))
+    print(codonInterpreter(input('Enter String: ')))
 
 main()
