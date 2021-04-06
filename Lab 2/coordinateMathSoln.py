@@ -88,10 +88,10 @@ class Triad :
 
 
 def convertToCoordinates (coordInput):
-    '''This function converts the string of inputs into 3 lists of floats that the Triad class can then use'''
-    '''
-    input: a string
-    output: 3 float lists
+    '''This function converts the string of inputs into 3 lists of floats that the Triad class can then use
+
+        input: a string
+        output: 3 float lists
     '''
     coordInput = coordInput.replace(' ','').replace('(','').replace(')','') # removes any unnecessary data like spaces and parenthesis
 
@@ -118,8 +118,8 @@ def convertToCoordinates (coordInput):
 
 
 def main():
-    '''asks for 3 atomic coordinates and outputs bond lengths and angles'''
-    '''
+    '''asks for 3 atomic coordinates and outputs bond lengths and angles
+
         -input: string
         -outputs: bond lengths and bond angles
     '''
