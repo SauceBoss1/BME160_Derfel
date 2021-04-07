@@ -47,8 +47,8 @@ class DNAstring (str):
         return (self.length()) 
     
     def purify(self):
-        ''' Return an upcased version of the string, collapsing a single run of Ns.'''
-        '''
+        ''' Return an upcased version of the string, collapsing a single run of Ns.
+
         -Note: There are many ways to insert the formatted { (number if Ns) } in our string. 
             I found that inserting the formatted output at the first instance of N to be the easiest since we are assuming there 
             is one block (or chain) of Ns AT MOST. (i.e. ATNNNNNNGCCCCTTT is a valid test case)
@@ -57,7 +57,7 @@ class DNAstring (str):
         upperString = self.upper() #makes all characters of string input uppercase (this is the equivalence of a caps lock on a keyboard)
         firstInstanceOfN = upperString.index('N') #this is important for the formatted output later
         counter = upperString.count('N') #counts the number of in the inputted string
-        upperString = upperString.replace('N','') #removes all instanced of N in the string
+        upperString = upperString.replace('N','') #removes all instances of N in the string
 
          
         # The below line inserts { (number of Ns) } at the index of the first instance of N
@@ -66,9 +66,8 @@ class DNAstring (str):
         return upperString
     
 def main():
-    ''' Get user DNA data and clean it up.'''
+    ''' Get user DNA data and clean it up.
     
-    '''
     Asks for nucleotide data from user and returns a cleaned string with {Number of Ns} replacing the block of Ns from orginal input
 
     Input: a string of  characters
