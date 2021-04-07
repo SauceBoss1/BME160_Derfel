@@ -41,7 +41,7 @@ class Triad:
         lengthA = self.__bondLength(a,b)
         lengthB = self.__bondLength(b,c)
         lengthC = self.__bondLength(a,c)
-        theta = self.__lawOfCosineAngle(lengthA,lengthB,lengthC)
+        theta = self.__lawOfCosineAngle(lengthA,lengthB,lengthC )
         return theta 
 
 #Calculates lengths(distances) of PQ, PR, QR
