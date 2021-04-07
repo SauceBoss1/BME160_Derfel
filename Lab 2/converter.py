@@ -3,8 +3,31 @@
 # Group Members: None
 
 '''
-Program docstring goes here
+converter.py
+
+
+This programs takes in a user input and outputs its corresponding amino acid
+    Inputs can be RNA or DNA codons, Amino Acid abbreviations, or one-letter amino acid abbreviations
+    Outputs are vary depending on the input. The following shows the general input and the expected output:
+        -RNA or DNA codon => Three letter Amino Acid Abbreviation
+        -Three letter Amino Acid Abbreviation => corresponding one letter abbreviation of AA
+        -One letter Amino Acid Abbreviation => corresponding three letter Amino Acid Abbreviation
+    
+    Example:
+    if I enter “ATG” (without quotes), then the program will output:
+        ATG = MET
+    if I enter “UAG” (without quotes), then the program will output:
+        UAG = ---
+    if I enter “E” (without quotes), then the program will output:
+        E = GLU
+    if I enter “Asp” (without quotes), then the program will output:
+        ASP = D
+
+Assumptions:
+    I'm going to assume that only amino acid related inputs (like mentioned above) are the only inputs otherwise return unknown
 '''
+
+
 short_AA = {
             'CYS': 'C', 'ASP': 'D', 'SER': 'S', 'GLN': 'Q', 'LYS': 'K',
             'ILE': 'I', 'PRO': 'P', 'THR': 'T', 'PHE': 'F', 'ASN': 'N', 
@@ -40,21 +63,30 @@ RNA_codon_table = {
 }
 dnaCodonTable = {key.replace('U','T'):value for key, value in RNA_codon_table.items()}
 
+#I use a seperate function to compare the user input in order to break the problem up into smaller pieces
 def codonInterpreter (inputString):
-    '''This function determins the correct dictionary output based on what input is given'''
-    if inputString.isupper() & ('T' in inputString): #DNA codon
+    '''
+    This function determins the correct dictionary output based on what input is given
+
+    If a codon is incorrect or unrecogninzable 'unknown' is returned
+
+    '''
+    inputString=inputString.upper() #makes input all uppercase
+
+    # a series of if and elif statments that determines whether or not the input is in one of the four dictionaries
+    if inputString in dnaCodonTable: #checks if input is a DNA codon
         return f'{inputString} = ' + f'{dnaCodonTable.get(inputString,"unknown").upper()}'
-    elif inputString.isupper() & ('U' in inputString): #RNA codon
+    elif inputString in RNA_codon_table: #checks if input is a RNA codon
         return f'{inputString} = ' + f'{RNA_codon_table.get(inputString,"unknown").upper()}'
-    elif len(inputString)==3: #Short AA
+    elif inputString in short_AA: #checks if input is a three-letter AA abbreviation
         return f'{inputString} = ' + f'{short_AA.get(inputString.upper(),"unknown")}'
-    elif len(inputString)==1: #long AA
+    elif inputString in long_AA: #checks if input is a three-letter AA abbreviation
         return f'{inputString} = ' + f'{long_AA.get(inputString,"unknown")}'
     else:
-        return 'unknown'
+        return f'{inputString} = unknown'
 
 def main():
-    ''' Function docstring goes here'''
+    '''Asks user for a string and returns the correct output'''
     print(codonInterpreter(input('Enter String: ')))
 
 main()

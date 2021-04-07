@@ -2,6 +2,7 @@
 # Name: Derfel Terciano (dtercian)
 # Group Members: None
 
+#from triad import *
 '''
 coordinateMathSoln.py
 This program takes in three sets of atomic coordinates, all provided on a single line. The program then calculates and returns the bond lengths and angles.
@@ -90,8 +91,8 @@ class Triad :
 def convertToCoordinates (coordInput):
     '''This function converts the string of inputs into 3 lists of floats that the Triad class can then use
 
-        input: a string
-        output: 3 float lists
+        -input: a string
+        -output: 3 float lists
     '''
     coordInput = coordInput.replace(' ','').replace('(','').replace(')','') # removes any unnecessary data like spaces and parenthesis
 
@@ -124,6 +125,7 @@ def main():
         -outputs: bond lengths and bond angles
     '''
     coordInput = input('Enter coordinates: ')
+    #coordInput = 'C = (39.447, 94.657, 11.824) N = (39.292, 95.716, 11.027) Ca = (39.462, 97.101, 11.465)'
 
     p,q,r = convertToCoordinates(coordInput) #since the convertToCoordinates function returns 3 lists, 3 names are assigned simultaneously to the function 
     bondInfo = Triad(p,q,r) #the Triad class is constructed
