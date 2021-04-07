@@ -26,48 +26,48 @@ class Triad:
         self.r = r
 #private helper methods
         
-    def _lawOfCosineAngle(self,a,b,c):
+    def __lawOfCosineAngle(self,a,b,c):
         '''returns an angle by taking in three points and returning a radian'''
         x = math.acos(((a**2)+(b**2)-(c**2))/(2*a*b))
         return x
 
-    def _bondLength(self,a,b):
+    def __bondLength(self,a,b):
         summationOfPoints = 0
         for i in range(len(a)):
             summationOfPoints += (a[i]-b[i])**2
         return math.sqrt(summationOfPoints)
     
-    def _angleCalculation(self,a,b,c):
-        lengthA = self._bondLength(a,b)
-        lengthB = self._bondLength(b,c)
-        lengthC = self._bondLength(a,c)
-        theta = self._lawOfCosineAngle(lengthA,lengthB,lengthC)
+    def __angleCalculation(self,a,b,c):
+        lengthA = self.__bondLength(a,b)
+        lengthB = self.__bondLength(b,c)
+        lengthC = self.__bondLength(a,c)
+        theta = self.__lawOfCosineAngle(lengthA,lengthB,lengthC)
         return theta 
 
 #Calculates lengths(distances) of PQ, PR, QR
     def dPQ (self):
         """ Provides the distance between point p and point q """
-        return self._bondLength(self.p,self.q)
+        return self.__bondLength(self.p,self.q)
     
     def dPR (self):
         """ Provides the distance between point p and point r """
-        return self._bondLength(self.p,self.r)
+        return self.__bondLength(self.p,self.r)
     
     def dQR (self):
         """ Provides the distance between point q and point r """
-        return self._bondLength(self.q,self.r)
+        return self.__bondLength(self.q,self.r)
     
     def angleP (self) :
         """ Provides the angle made at point p by segments pq and pr (radians). """
-        return self._angleCalculation(self.q,self.p,self.r)
+        return self.__angleCalculation(self.q,self.p,self.r)
     
     def angleQ (self) :
         """ Provides the angle made at point q by segments qp and qr (radians). """
-        return self._angleCalculation(self.p,self.q,self.r)
+        return self.__angleCalculation(self.p,self.q,self.r)
         
     def angleR (self) :
         """ Provides the angle made at point r by segments rp and rq (radians). """
-        return self._angleCalculation(self.p,self.r,self.q)
+        return self.__angleCalculation(self.p,self.r,self.q)
 
 
 def convertToCoordinates (coordInput):
@@ -116,7 +116,6 @@ def main():
     ncBondLength = 'N-C bond length = ' +f'{bondInfo.dPQ():.3}\n'
     ncaBondLength = 'N-Ca bond length = ' + f'{bondInfo.dQR():.3}\n'
     nBondAngle = 'C-N-Ca bond angle = ' +f'{float(math.degrees(bondInfo.angleQ())):.4}'
-
     print (f'{ncBondLength}{ncaBondLength}{nBondAngle}') #prints results of calculations
 
 main()
