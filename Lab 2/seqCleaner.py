@@ -55,6 +55,10 @@ class DNAstring (str):
             If there were multiple blocks of Ns (i.e. ATNNNGCGCGNNNNTTAATATANNNN) then I would have used a different approach.
         '''
         upperString = self.upper() #makes all characters of string input uppercase (this is the equivalence of a caps lock on a keyboard)
+        
+        if 'N' not in upperString: #if the input does not contain 'N' then return the the uppercased input
+            return upperString
+
         firstInstanceOfN = upperString.index('N') #this is important for the formatted output later
         counter = upperString.count('N') #counts the number of in the inputted string
         upperString = upperString.replace('N','') #removes all instances of N in the string
