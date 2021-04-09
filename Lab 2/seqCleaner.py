@@ -30,7 +30,6 @@ Any lower case letters are converted to uppercase
 
 Assumptions:
     -Only (A,C,G,T,N) are allowed characters
-    -An input without N (i.e. a nucleotide sequence that does not contain the character N) will not be tested
 '''
 
 class DNAstring (str):
