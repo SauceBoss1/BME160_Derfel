@@ -101,12 +101,12 @@ def convertToCoordinates (coordInput):
     #   correspond to the triad class inputs
     coordInput = coordInput.replace('C=', '').replace('N=', ':').replace('Ca=', ':')
     # using the example string above, the current result would look like the following string (keep in mind, the following is still one string):
-    #   '39.447, 94.657, 11.824:39.292, 95.716, 11.027:39.462, 97.101, 11.465'
+    #   '39.447,94.657,11.824:39.292,95.716,11.027:39.462,97.101,11.465'
 
     # I create the 3-element list in the below line where each element will correspond to the a certain input of the Triad class
     coordInput = coordInput.split(':')
     # now the example string would look like the following 3-element list:
-    #   ['39.447, 94.657, 11.824','39.292, 95.716, 11.027','39.462, 97.101, 11.465']
+    #   ['39.447,94.657,11.824','39.292,95.716,11.027','39.462,97.101,11.465']
 
 
     # the 3 lines below turns each element into its own individual list and is then formatted into a float
@@ -124,7 +124,7 @@ def main():
         -input: string
         -outputs: bond lengths and bond angles
     '''
-    coordInput = input('Enter coordinates: ')
+    coordInput = input('Enter coordinates: ')   
     #coordInput = 'C = (39.447, 94.657, 11.824) N = (39.292, 95.716, 11.027) Ca = (39.462, 97.101, 11.465)'
 
     p,q,r = convertToCoordinates(coordInput) #since the convertToCoordinates function returns 3 lists, 3 names are assigned simultaneously to the function 
