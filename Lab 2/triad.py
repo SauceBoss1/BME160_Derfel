@@ -50,7 +50,7 @@ class Triad:
         '''Calculates the bond length from two 3-elemented tuples'''
         #this function uses a for loop in order to calculate the summation of the distance between two 3D points
         summationOfPoints = 0
-        for i in range(len(a)): #since points given are consistent, the list size will always be the same for p, q, and r
+        for i in range(len(a)): #since points given are consistent, the tuple size will always be the same for p, q, and r
             summationOfPoints += (a[i]-b[i])**2
         return math.sqrt(summationOfPoints)
     
