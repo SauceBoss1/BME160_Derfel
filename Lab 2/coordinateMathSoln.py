@@ -111,9 +111,9 @@ def convertToCoordinates (coordInput):
 
     # the 3 lines below turns each element into its own individual list and is then formatted into a float
     # in terms of the triad class inputs: coordC = p, coordN = q, coordCa = r
-    coordC = list(map(float,coordInput[0].split(',')))
-    coordN = list(map(float,coordInput[1].split(',')))
-    coordCa = list(map(float,coordInput[2].split(',')))
+    coordC = tuple(map(float,coordInput[0].split(',')))
+    coordN = tuple(map(float,coordInput[1].split(',')))
+    coordCa = tuple(map(float,coordInput[2].split(',')))
 
     return coordC, coordN, coordCa
 
