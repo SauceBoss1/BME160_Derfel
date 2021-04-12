@@ -34,10 +34,7 @@ class ProteinParam :
                 self.aaComp[char] += 1
 
     def aaCount (self):
-        validAACounter = 0
-        for aa in self.aaComp:
-           validAACounter += self.aaComp[aa] 
-        return validAACounter
+        return sum(self.aaComp[aa] for aa in self.aaComp)
 
     def pI (self):
         pass
