@@ -94,26 +94,21 @@ def convertToCoordinates (coordInput):
         -input: a string
         -output: 3 float lists
     '''
-    coordInput = coordInput.replace(' ','').replace('(','').replace(')','') # removes any unnecessary data like spaces and parenthesis
-
-    # the following line removes all idenitfiers and replaces 'N=' and 'Ca=' with ':' (Any unique character that isn't related to the string input will work)
-    # I used the approach of inserting unique character because I need to eventually split the string into a 3-element list that
-    #   correspond to the triad class inputs
-    coordInput = coordInput.replace('C=', '').replace('N=', ':').replace('Ca=', ':')
+    coordInput = coordInput.replace(' ','').replace('(',':').replace(')',':') # removes any unnecessary data like spaces and parenthesis
     # using the example string above, the current result would look like the following string (keep in mind, the following is still one string):
-    #   '39.447,94.657,11.824:39.292,95.716,11.027:39.462,97.101,11.465'
+    #   'C=:39.447,94.657,11.824:N=:39.292,95.716,11.027:Ca=:39.462,97.101,11.465:'
 
     # I create the 3-element list in the below line where each element will correspond to the a certain input of the Triad class
     coordInput = coordInput.split(':')
     # now the example string would look like the following 3-element list:
-    #   ['39.447,94.657,11.824','39.292,95.716,11.027','39.462,97.101,11.465']
+    #   ['C=','39.447,94.657,11.824','N=','39.292,95.716,11.027','Ca=','39.462,97.101,11.465','']
 
 
     # the 3 lines below turns each element into its own individual list and is then formatted into a float
     # in terms of the triad class inputs: coordC = p, coordN = q, coordCa = r
-    coordC = tuple(map(float,coordInput[0].split(',')))
-    coordN = tuple(map(float,coordInput[1].split(',')))
-    coordCa = tuple(map(float,coordInput[2].split(',')))
+    coordC = tuple(map(float,coordInput[1].split(',')))
+    coordN = tuple(map(float,coordInput[3].split(',')))
+    coordCa = tuple(map(float,coordInput[5].split(',')))
 
     return coordC, coordN, coordCa
 
