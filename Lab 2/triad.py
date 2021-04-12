@@ -39,7 +39,8 @@ class Triad:
         self.p = p
         self.q = q
         self.r = r
-#private helper methods
+#private helper methods used for intermediate calcualtions
+#(I used name mangling in order to prevent users from accessing these methods)
         
     def __lawOfCosineAngle(self,a,b,c):
         '''returns an angle by taking in three side lengths and returning a radian'''
