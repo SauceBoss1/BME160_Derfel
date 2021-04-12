@@ -56,10 +56,7 @@ class ProteinParam :
         return self.molarExtinction() / myMW if myMW else 0.0
 
     def molecularWeight (self):
-        summationOfAA = 0
-        for aa in self.aaComp:
-            summationOfAA += (self.aaComp[aa]*(self.aa2mw[aa]-self.mwH2O))
-        return self.mwH2O + summationOfAA
+        return self.mwH2O + sum((self.aaComp[aa]*(self.aa2mw[aa]-self.mwH2O)) for aa in self.aaComp)
 
 # Please do not modify any of the following.  This will produce a standard output that can be parsed
     
