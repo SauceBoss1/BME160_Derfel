@@ -70,6 +70,8 @@ def codonInterpreter (inputString):
 
     If a codon is incorrect or unrecogninzable 'unknown' is returned
 
+    inputs: a string
+    output: a formatted string
     '''
     inputString=inputString.upper() #makes input all uppercase
 
