@@ -16,7 +16,8 @@ class ProteinParam :
         'P': 115.131, 'V': 117.146, 'E': 147.129, 'K': 146.188, 'Q': 146.145,
         'W': 204.225,  'F': 165.189, 'L': 131.173, 'R': 174.201, 'Y': 181.189
         }
-
+    
+    
     mwH2O = 18.015
     aa2abs280= {'Y':1490, 'W': 5500, 'C': 125}
 
@@ -26,29 +27,39 @@ class ProteinParam :
     aaCterm = 2.34
 
     def __init__ (self, protein):
-        pass
+        self.protein = protein.upper()
+        self.aaComp = {key:0 for key in self.aa2mw} #creates a dictionary of all AA keys but set to 0
+        for char in protein:
+            if char in self.aaComp:
+                self.aaComp[char] += 1
 
     def aaCount (self):
-        pass
+        validAACounter = 0
+        for aa in self.aaComp:
+           validAACounter += self.aaComp[aa] 
+        return validAACounter
 
     def pI (self):
         pass
 
     def aaComposition (self) :
-        pass
+        return self.aaComp
 
     def _charge_ (self):
         pass
 
     def molarExtinction (self):
-        pass
+        return (self.aaComp['Y']*self.aa2abs280['Y'])+(self.aaComp['W']*self.aa2abs280['W'])+(self.aaComp['C']*self.aa2abs280['C'])
 
     def massExtinction (self):
         myMW =  self.molecularWeight()
         return self.molarExtinction() / myMW if myMW else 0.0
 
     def molecularWeight (self):
-        pass
+        summationOfAA = 0
+        for aa in self.aaComp:
+            summationOfAA += (self.aaComp[aa]*(self.aa2mw[aa]-self.mwH2O))
+        return self.mwH2O + summationOfAA
 
 # Please do not modify any of the following.  This will produce a standard output that can be parsed
     
