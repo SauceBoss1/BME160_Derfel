@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+# Name: Derfel Terciano (dtercian)
+# Group Members: None
+
+
+import numpy
 class ProteinParam :
     # These tables are for calculating:
 #     molecular weight (aa2mw), along with the mol. weight of H2O (mwH2O)
@@ -32,18 +38,32 @@ class ProteinParam :
         for char in protein:
             if char in self.aaComp:
                 self.aaComp[char] += 1
-
+#private helper methods 
+#These methods are not meant tobe accessed by anyone else therefore, I will be using name mangling
+    def __sumOfPosCharges(self,pH):
+        nTerm = (10**self.aaNterm)/(10**self.aaNterm + 10**pH)
+        sumOfAA = sum((self.aaComp[aa])*(10**self.aa2chargePos[aa]/(10**self.aa2chargePos[aa]+10**pH)) for aa in self.aa2chargePos)
+        return nTerm + sumOfAA
+    def __sumOfNegCharges(self,pH):
+        cTerm = (10**pH)/(10**self.aaCterm + 10**pH)
+        sumOfAA = sum((self.aaComp[aa])*(10**pH/(10**self.aa2chargeNeg[aa]+10**pH)) for aa in self.aa2chargeNeg)
+        return cTerm + sumOfAA
+    
+#public methods
     def aaCount (self):
         return sum(self.aaComp[aa] for aa in self.aaComp)
 
     def pI (self):
-        pass
+        if self.aaCount() == 0:
+            return None
+        chargeAA = [abs(self._charge_(pH)) for pH in numpy.arange(0,14.01,0.01)]
+        return chargeAA.index(min(chargeAA))
 
     def aaComposition (self) :
         return self.aaComp
 
-    def _charge_ (self):
-        pass
+    def _charge_ (self,pH):
+        return self.__sumOfPosCharges(pH) - self.__sumOfNegCharges(pH)
 
     def molarExtinction (self):
         return (self.aaComp['Y']*self.aa2abs280['Y'])+(self.aaComp['W']*self.aa2abs280['W'])+(self.aaComp['C']*self.aa2abs280['C'])
@@ -53,7 +73,10 @@ class ProteinParam :
         return self.molarExtinction() / myMW if myMW else 0.0
 
     def molecularWeight (self):
-        return self.mwH2O + sum((self.aaComp[aa]*(self.aa2mw[aa]-self.mwH2O)) for aa in self.aaComp)
+        if self.aaCount() > 0:
+            return self.mwH2O + sum((self.aaComp[aa]*(self.aa2mw[aa]-self.mwH2O)) for aa in self.aaComp)
+        else:
+            return 0
 
 # Please do not modify any of the following.  This will produce a standard output that can be parsed
     
