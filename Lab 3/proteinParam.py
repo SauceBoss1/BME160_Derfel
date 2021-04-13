@@ -57,7 +57,7 @@ class ProteinParam :
         if self.aaCount() == 0:
             return None
         chargeAA = [abs(self._charge_(pH)) for pH in numpy.arange(0,14.01,0.01)]
-        return chargeAA.index(min(chargeAA))
+        return chargeAA.index(min(chargeAA))*.01
 
     def aaComposition (self) :
         return self.aaComp
