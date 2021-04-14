@@ -35,11 +35,12 @@ class ProteinParam :
     def __init__ (self, protein):
         self.protein = protein.upper()
         self.aaComp = {key:0 for key in self.aa2mw} #creates a dictionary of all AA keys but set to 0
-        for char in protein:
+        for char in self.protein:
             if char in self.aaComp:
                 self.aaComp[char] += 1
+
 #private helper methods 
-#These methods are not meant tobe accessed by anyone else therefore, I will be using name mangling
+#These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
     def __sumOfPosCharges(self,pH):
         nTerm = (10**self.aaNterm)/(10**self.aaNterm + 10**pH)
         sumOfAA = sum((self.aaComp[aa])*(10**self.aa2chargePos[aa]/(10**self.aa2chargePos[aa]+10**pH)) for aa in self.aa2chargePos)
@@ -48,16 +49,61 @@ class ProteinParam :
         cTerm = (10**pH)/(10**self.aaCterm + 10**pH)
         sumOfAA = sum((self.aaComp[aa])*(10**pH/(10**self.aa2chargeNeg[aa]+10**pH)) for aa in self.aa2chargeNeg)
         return cTerm + sumOfAA
+
+
+#private methods for binary search
+#These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
+    def __leftMost(self,listX,target, precision=2):
+        target = target*(.1**(-1*precision))
+        leftBound=0
+        rightBound=len(listX)-2
+        while leftBound < rightBound:
+            mid = (leftBound+rightBound)//2
+            midVal = int(listX[mid]*(0.1**(-1*precision)))
+            if midVal < target:
+                leftBound = mid +1
+            else:
+                rightBound = mid
+        return leftBound
+    
+    def __rightMost(self,listX,target,precision=2):
+        target = target*(.1**(-1*precision))
+        leftBound=0
+        rightBound=len(listX)-1
+        while leftBound < rightBound:
+            mid = (leftBound+rightBound)//2
+            midVal = int(listX[mid]*(0.1**(-1*precision)))
+            if midVal > target:
+                rightBound = mid
+            else:
+                leftBound = mid + 1
+        return rightBound-1
+
+    def __dupBinSearch(self,listX,target,precision=2):
+        listX=sorted(listX)
+        left=self.__leftMost(listX,target,precision)
+        right=self.__rightMost(listX,target,precision)
+        duplicates = [abs(listX[items]) for items in range(left,right+1)]
+        smallestValue=2**256
+        for item in duplicates:
+            if item < smallestValue:
+                smallestValue = item
+        return smallestValue
     
 #public methods
     def aaCount (self):
         return sum(self.aaComp[aa] for aa in self.aaComp)
 
-    def pI (self):
+    def pI (self,useBinary=False):
         if self.aaCount() == 0:
-            return None
-        chargeAA = [abs(self._charge_(pH)) for pH in numpy.arange(0,14.01,0.01)]
-        return chargeAA.index(min(chargeAA))*.01
+            return 0
+        if useBinary:
+            chargeOfAA = [self._charge_(pH) for pH in numpy.arange(0,14.01,0.01)]
+            smallestCharge = self.__dupBinSearch(chargeOfAA,0)
+            return chargeOfAA.index(smallestCharge) * 0.01
+        else:
+            chargeAA = [abs(self._charge_(pH)) for pH in numpy.arange(0,14.01,0.01)]
+            return chargeAA.index(min(chargeAA))*.01
 
     def aaComposition (self) :
         return self.aaComp
