@@ -84,10 +84,6 @@ class ProteinParam :
         left=self.__leftMost(listX,target,precision)
         right=self.__rightMost(listX,target,precision)
         duplicates = [abs(listX[items]) for items in range(left,right+1)]
-        # smallestValue=2**256
-        # for item in duplicates:
-        #     if item < smallestValue:
-        #         smallestValue = item
         return min(duplicates)
     
 #public methods
