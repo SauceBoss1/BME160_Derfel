@@ -53,6 +53,8 @@ class ProteinParam :
 
 #private methods for binary search
 #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
+
+#more documentation on binary search will be im method __dupBinSearch
     def __leftMost(self,listX,target, precision=2):
         target = target*(.1**(-1*precision))
         leftBound=0
@@ -84,13 +86,15 @@ class ProteinParam :
         left=self.__leftMost(listX,target,precision)
         right=self.__rightMost(listX,target,precision)
         duplicates = [abs(listX[items]) for items in range(left,right+1)]
+        if min(duplicates) not in listX:
+            return min(duplicates)*-1
         return min(duplicates)
     
 #public methods
     def aaCount (self):
         return sum(self.aaComp[aa] for aa in self.aaComp)
 
-    def pI (self,useBinary=False):
+    def pI (self,useBinary=True):
         if self.aaCount() == 0:
             return 0
         if useBinary:
