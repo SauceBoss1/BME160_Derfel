@@ -85,25 +85,21 @@ class ProteinParam :
         listX=sorted(listX)
         left=self.__leftMost(listX,target,precision)
         right=self.__rightMost(listX,target,precision)
-        duplicates = [abs(listX[items]) for items in range(left,right+1)]
-        if min(duplicates) not in listX:
-            return min(duplicates)*-1
-        return min(duplicates)
+        return [listX[items] for items in range(left,right+1)]
     
 #public methods
     def aaCount (self):
         return sum(self.aaComp[aa] for aa in self.aaComp)
 
-    def pI (self,useBinary=True):
+    def pI (self):
         if self.aaCount() == 0:
             return 0
-        if useBinary:
-            chargeOfAA = [self._charge_(pH) for pH in numpy.arange(0,14.01,0.01)]
-            smallestCharge = self.__dupBinSearch(chargeOfAA,0)
-            return chargeOfAA.index(smallestCharge) * 0.01
-        else:
-            chargeAA = [abs(self._charge_(pH)) for pH in numpy.arange(0,14.01,0.01)]
-            return chargeAA.index(min(chargeAA))*.01
+        chargeOfAA = [self._charge_(pH) for pH in numpy.arange(0,14.01,0.01)]
+        smallestCharge = self.__dupBinSearch(chargeOfAA,0) #returns list
+        smallestAbsCharge = [abs(netCharge) for netCharge in smallestCharge]
+        if min(smallestAbsCharge) not in chargeOfAA:
+            return chargeOfAA.index(min(smallestAbsCharge)*-1) * 0.01
+        return chargeOfAA.index(min(smallestAbsCharge)) * 0.01
 
     def aaComposition (self) :
         return self.aaComp
