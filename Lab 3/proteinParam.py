@@ -144,6 +144,8 @@ class ProteinParam :
         Uses binary search in order to find the smallest net charges of the protein across the pH range
             -Why binary search? In short its faster and more efficient!
         '''
+        if self.aaCount() == 0: #if there are no valid AAs, then return basically nothing
+            return 0
         return self.__binarySearchOfCharges(0,14,0) #Searches for the charge that is closes to thee target value then it returns the pH closest to the target value
 
     def aaComposition (self) :
