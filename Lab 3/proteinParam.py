@@ -5,6 +5,8 @@
 proteinParam.py
 This program takes in a string of Amino Acids (also known as a protein) and the program returns the caluclated 
 physical-chemical properties of a protein sequence similar to what ProtParam outputs. 
+    Input: a string of AAs (a protein)
+    Output: formatted string of properties of protein
 
 Notes: 
     The pI is returned under the Lehninger method and not with the IPC protein method.
