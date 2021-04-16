@@ -106,82 +106,33 @@ class ProteinParam :
         return cTerm + sumOfAA
 
 
-#private methods for binary search
+#private method(s) for binary search
 #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
 
-#more documentation on binary search will be in method __dupBinSearch
-    def __leftMost(self,listX,target, precision=2):
+#binary search
+    def __binarySearchOfCharges(self,leftBound, rightBound ,targetValue ,precision=2):
         '''
-        Takes in a list and searches and returns the first occurance of the duplicate target (in the list) based of the precision
+        Searches for the charge that is closes to thee target value then it returns the pH closest to the target value
 
-        optional parameter: precision (by default the algorithm withh search up to 2 decimal places)
+                -inputs: a leftbound(float), a rightbound(float), a target value(float), and an optional precision parameter (2 by default)
+                -Output: a float of the pH value
 
-            -input: a list, target value, [precision (set to 2 by default)]
-            -output: index (an integer) of the first occurance fo the duplicate item
-        
-        Example Input: [-1.00, 0.0005, 0.00007, 5.00]
-        Output (of the example): 1
-        
+            -Example inputs: 0,14,0
+            -Output of example: some pH where the net charge is closest to the target
+
         '''
-        target = target*(.1**(-1*precision)) #since we're searching with a precision value, we need to change the decimal place of the target value
-        leftBound=0 #set beginning index at first index of list
-        rightBound=len(listX)-2 #set last index at the last element of the list
-        while leftBound < rightBound: 
-            mid = (leftBound+rightBound)//2 #in order for binary search to work properly, we need to find the middle element which is found by floor dividing the lest and right bounds by 2
-            midVal = int(listX[mid]*(0.1**(-1*precision))) #this makes the value of the middle element the correct precision (by default this will only compare up to 2 decimal places)
-
-            #the following lines checks to see if the value of the element in the middle of the 2 bounds is less than or greater than the targeted value
-            if midVal < target:
-                leftBound = mid +1 #if the midpoint value is less than the targeted value, move the left bound of the search to the right of the mid point
+        left=leftBound
+        right=rightBound
+        while left < right: #this makes the loop run until both the right and left bound are equal to each other, any more and the loop will break
+            midPoint = (left+right)/2 #take the 2 bounds and find the midpoint of them
+            chargeATpH = self._charge_(midPoint) # identifies the charge at the pH
+            if chargeATpH > targetValue: 
+                left = midPoint + (.1**precision) #based on a standard pH and charge graph, if the charge at the midpoint is bigger than target, we need to move the leftbound to the right
             else:
-                rightBound = mid #if the midpoint value is greater than the targeted value, move the right bound to the position of the mid point
-        return leftBound
-    
-    def __rightMost(self,listX,target,precision=2):
-        '''
-        Takes in a list and searches and returns the last occurance of the duplicated target (in the list) based of the precision
+                right = midPoint - (.1**precision) #if the charge at the midpoint is smaller, move the rightbound to the left
+        return right #returns the final result (returning either the left or right bound should be ok)
 
-        optional parameter: precision (by default the algorithm withh search up to 2 decimal places)
 
-            -input: a list, target value, [precision (set to 2 by default)]
-            -output: index (an integer) of the lasr occurance fo the duplicate item
-        
-        Example Input: [-1.00, 0.0005, 0.00007, 5.00]
-        Output (of the example): 1
-        
-        '''
-        #for the 3 lines below refer to the first 3 comments in __leftMost for the setup
-        target = target*(.1**(-1*precision)) 
-        leftBound=0
-        rightBound=len(listX)-1
-        while leftBound < rightBound:
-            mid = (leftBound+rightBound)//2 #in order for binary search to work properly, we need to find the middle element which is found by floor dividing the lest and right bounds by 2
-            midVal = int(listX[mid]*(0.1**(-1*precision))) #this makes the value of the middle element the correct precision (by default this will only compare up to 2 decimal places)
-            if midVal > target: 
-                rightBound = mid #if the value of the midpoint is bigger than the targeted value, then make the right bound the current position of the mid point
-            else:
-                leftBound = mid + 1 #if the value of the midpoint is smaller than the targeted value, then move the left bound to the right of the midpoint
-        return rightBound-1
-
-    def __dupBinSearch(self,listX,target,precision=2):
-        '''
-        Does a duplicate(in the context of this program it's an approximate) binary search of a given list and a target value.
-        The method then returns a list of values that it found were duplicate values based on the precision value (2 decimal places is the default).\n
-        Why would we use a binary search? Binary searches are typically faster than a linear search. This creates low run times and high efficency!
-
-            -inputs: a list, a target value,[precison (by default the precision is 2 decimal places)]
-            -outputs: a list of item(s) that were found to be duplicates based on the precision
-
-        -Example input: [-1, 0.00004, 0.0003, 10], target = 0,
-        -Output of Example: [0.00004, 0.0003] (this is because since our precision is 2 decimal places (by default), 0.00004 and 0.0003 is actually 0.00 in the algorithm)
-
-        Credits: my readings on the binary searches come mainly from Wikipedia (https://en.wikipedia.org/wiki/Binary_search_algorithm)
-        '''
-        listX=sorted(listX) #in order for binary searches to work, arrays or lists must be sorted from most negative to most positive items
-        leftIndex=self.__leftMost(listX,target,precision) #this uses binary search to find the first index of the duplicate element based on precision
-        rightIndex=self.__rightMost(listX,target,precision) #this uses binary search to find the last index of the duplicate element based on precision
-        return [listX[items] for items in range(leftIndex,rightIndex+1)] #returns a list of what the algorithm found were duplicates based on the the precision value 
-    
 #public methods
     def aaCount (self):
         '''returns the sum of valid AAs in the aaComposition() dictionary'''
@@ -193,21 +144,7 @@ class ProteinParam :
         Uses binary search in order to find the smallest net charges of the protein across the pH range
             -Why binary search? In short its faster and more efficient!
         '''
-        if self.aaCount() == 0: #if there are no valid AAs in the given string, then just return 0
-            return 0
-
-        chargeOfAA = [self._charge_(pH) for pH in numpy.arange(0,14.01,0.01)] #cosntructs a list net charges from pH range 0-14 in increments of 0.01 (there will be 1400 elements in list!!)
-        #note: each index in the list is correlated to a pH
-
-        smallestCharge = self.__dupBinSearch(chargeOfAA,0) #returns list of all the charges closest to zero (this is because -0.007 and 0.005 is the same as 0.00 in the algorithm)
-        #I could've written the enitre pI method in 4 lines of code using the min() function but as I state before:
-        #there are 1400 elements in the list chargeOfAA, its much more efficient if I find the min() of a list of 10 elements than a list of 1400 elements.
-
-        smallestAbsCharge = [abs(netCharge) for netCharge in smallestCharge] #in order to find the smallest charge closest to zero, I have to make all elements in smallestCharge positive/
-
-        if min(smallestAbsCharge) not in chargeOfAA: #sometimes, the charge closest to zero is a negative number and keep in mind I made all values positive in smallestAbsCharge
-            return chargeOfAA.index(min(smallestAbsCharge)*-1) * 0.01 #this coverts the smallest charge back to negative number
-        return chargeOfAA.index(min(smallestAbsCharge)) * 0.01 #returns the index of the charge closest to zero then I multiply the index by 0.01 in order to get the correct decimal place
+        return self.__binarySearchOfCharges(0,14,0)
 
     def aaComposition (self) :
         '''returns a dictionary with Amino Acids as keys and the number of their respective amino acids found'''
