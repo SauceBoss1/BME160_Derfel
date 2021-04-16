@@ -107,12 +107,16 @@ class ProteinParam :
     def _charge_ (self,pH):
         return self.__sumOfPosCharges(pH) - self.__sumOfNegCharges(pH)
 
-    def molarExtinction (self):
-        return (self.aaComp['Y']*self.aa2abs280['Y'])+(self.aaComp['W']*self.aa2abs280['W'])+(self.aaComp['C']*self.aa2abs280['C'])
+    def molarExtinction (self, cystine = True):
+        cysResidue = 0
+        if cystine:
+            cysResidue = (self.aaComp['C']*self.aa2abs280['C'])
+        return (self.aaComp['Y']*self.aa2abs280['Y'])+(self.aaComp['W']*self.aa2abs280['W'])+cysResidue
 
-    def massExtinction (self):
+
+    def massExtinction (self, cystine = True):
         myMW =  self.molecularWeight()
-        return self.molarExtinction() / myMW if myMW else 0.0
+        return self.molarExtinction(cystine) / myMW if myMW else 0.0
 
     def molecularWeight (self):
         if self.aaCount() > 0:
