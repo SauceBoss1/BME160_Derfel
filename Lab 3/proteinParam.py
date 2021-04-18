@@ -84,7 +84,8 @@ class ProteinParam :
         for char in self.protein: #iterates through each character in given input
             if char in self.aaComp: #checks to see if the character from the given input is a valid
                 self.aaComp[char] += 1
-
+        if self.aaCount() == 0: #If nothing valid is entered, return a print statment
+            print('WARNING: No valid Amino Acid(s) were entered. All methods in the class will now return zero (0) :)')
 #private helper methods 
 #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private.
     def __sumOfPosCharges(self,pH):
