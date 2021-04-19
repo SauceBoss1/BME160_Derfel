@@ -4,7 +4,11 @@
 import numpy
 import sys
 
+'''Insert Module Docstring'''
+
+
 class NucParams:
+    '''Insert Documentation later'''
     rnaCodonTable = {
     # RNA codon table
     # U
@@ -31,10 +35,30 @@ class NucParams:
     dnaCodonTable = {key.replace('U','T'):value for key, value in rnaCodonTable.items()}
 
     def __init__ (self, inString=''):
-        pass
-        
+        self.nucComp = { 'A':0, 'T':0, 'C':0, 'G':0, 'U':0, 'N':0} # nucleotide comp
+        self.aaComp = {aa:0 for aa in self.rnaCodonTable.values()} # amino acid comp
+        self.codonComp = {aa:0 for aa in self.rnaCodonTable} # codon comp
+        self.addSequence(inString)
+
+
     def addSequence (self, inSeq):
-        pass
+        inSeq = inSeq.replace(' ','').upper() #this has the possibility for input string to be DNA as well
+        inSeqRNAonly = inSeq.replace('T','U') #converts DNA to RNA
+
+        for codonIndex in range(0,len(inSeqRNAonly),3): #deals with the codon comp
+            codonString = inSeqRNAonly[codonIndex:codonIndex+3] #extracts the string from the codonIndex
+            if codonString in self.codonComp:
+                self.codonComp[codonString] += 1
+
+        for validCodon in self.codonComp: #deals with the AA comp
+            self.aaComp[self.rnaCodonTable[validCodon]] += self.codonComp[validCodon]
+
+        for character in inSeq: #deals with the nucleotide composition
+            if character in self.nucComp:
+                self.nucComp[character]  += 1
+        
+        
+
     def aaComposition(self):
         return self.aaComp
     def nucComposition(self):
@@ -199,7 +223,7 @@ class ProteinParam :
 
     def massExtinction (self, cystine = True):
         '''Calculates the mass extinction coefficient of the protein'''
-        myMW =  self.molecularWeight() #gets moleculat weight of protein
+        myMW =  self.molecularWeight() #gets molecular weight of protein
         return self.molarExtinction(cystine) / myMW if myMW else 0.0 #uses molar extinction to get mass extinction
 
     def molecularWeight (self):
