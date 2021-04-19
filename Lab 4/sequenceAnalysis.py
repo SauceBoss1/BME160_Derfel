@@ -97,16 +97,16 @@ class ProteinParam :
 
 
     '''
-    # These tables are for calculating:
-#     molecular weight (aa2mw), along with the mol. weight of H2O (mwH2O)
-#     absorbance at 280 nm (aa2abs280)
-#     pKa of positively charged Amino Acids (aa2chargePos)
-#     pKa of negatively charged Amino acids (aa2chargeNeg)
-#     and the constants aaNterm and aaCterm for pKa of the respective termini
-#  Feel free to move these to appropriate methods as you like
+        # These tables are for calculating:
+    #     molecular weight (aa2mw), along with the mol. weight of H2O (mwH2O)
+    #     absorbance at 280 nm (aa2abs280)
+    #     pKa of positively charged Amino Acids (aa2chargePos)
+    #     pKa of negatively charged Amino acids (aa2chargeNeg)
+    #     and the constants aaNterm and aaCterm for pKa of the respective termini
+    #  Feel free to move these to appropriate methods as you like
 
-# As written, these are accessed as class attributes, for example:
-# ProteinParam.aa2mw['A'] or ProteinParam.mwH2O
+    # As written, these are accessed as class attributes, for example:
+    # ProteinParam.aa2mw['A'] or ProteinParam.mwH2O
 
     aa2mw = {
         'A': 89.093,  'G': 75.067,  'M': 149.211, 'S': 105.093, 'C': 121.158,
@@ -136,8 +136,8 @@ class ProteinParam :
                 self.aaComp[char] += 1
         if self.aaCount() == 0: #If nothing valid is entered, then warn the user that their input is invalid
             print('WARNING: No valid Amino Acid(s) were entered. All methods in the class will now return zero (0) :)')
-#private helper methods 
-#These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private.
+    #private helper methods 
+    #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private.
     def __sumOfPosCharges(self,pH):
         '''
         Takes in a pH can calculates the sum of positive charges in the given protein sequence
@@ -157,10 +157,10 @@ class ProteinParam :
         return cTerm + sumOfAA
 
 
-#private method(s) for binary search
-#These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
+    #private method(s) for binary search
+    #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private
 
-#binary search
+    #binary search
     def __binarySearchOfCharges(self,leftBound, rightBound ,targetValue ,precision=2):
         '''
         Searches for the charge that is closes to thee target value then it returns the pH closest to the target value
@@ -184,7 +184,7 @@ class ProteinParam :
         return right #returns the final result (returning either the left or right bound should be ok)
 
 
-#public methods
+    #public methods
     def aaCount (self):
         '''returns the sum of valid AAs in the aaComposition() dictionary'''
         return sum(self.aaComp[aa] for aa in self.aaComp) #since invalid characters have already been accounted for, it is ok to just sum the value of each key in aaComposition()
