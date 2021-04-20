@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: None
+"""Insert Module docstring"""
 import numpy
 import sys
 
-"""Insert Module docstring"""
 
 
 class NucParams:
