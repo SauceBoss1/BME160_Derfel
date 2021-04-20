@@ -4,7 +4,7 @@
 import numpy
 import sys
 
-'''Insert Module Docstring'''
+"""Insert Module docstring"""
 
 
 class NucParams:
