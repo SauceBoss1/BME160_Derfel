@@ -24,7 +24,7 @@ class GenomeAnalyzer:
 
         for codon, aa in sorted(self.myNuc.rnaCodonTable.items(), key=lambda a:a[1]):
             codonFreq = (self.myNuc.codonComposition()[codon] / self.myNuc.aaComposition()[aa]) * 100
-            print ('{:s} : {:s} {:5.1f} ({:6d})'.format(codon, aa, codonFreq, self.myNuc.codonComposition()[codon]))
+            print (f'{codon} : {aa} {codonFreq:5.1f} ({self.myNuc.codonComposition()[codon]:6d})')
 
 
 
