@@ -35,7 +35,7 @@ class NucParams:
     dnaCodonTable = {key.replace('U','T'):value for key, value in rnaCodonTable.items()}
 
     def __init__ (self, inString=''):
-        self.nucComp = { 'A':0, 'T':0, 'C':0, 'G':0, 'U':0, 'N':0} # nucleotide comp
+        self.nucComp = { 'A':0, 'T':0, 'C':0, 'G':0, 'U':0, 'N':0 } # nucleotide comp
         self.aaComp = {aa:0 for aa in self.rnaCodonTable.values()} # amino acid comp
         self.codonComp = {aa:0 for aa in self.rnaCodonTable} # codon comp
         self.addSequence(inString)
@@ -47,11 +47,10 @@ class NucParams:
 
         for codonIndex in range(0,len(inSeqRNAonly),3): #deals with the codon comp
             codonString = inSeqRNAonly[codonIndex:codonIndex+3] #extracts the string from the codonIndex
-            if codonString in self.codonComp:
-                self.codonComp[codonString] += 1
-
-        for validCodon in self.codonComp: #deals with the AA comp
-            self.aaComp[self.rnaCodonTable[validCodon]] += self.codonComp[validCodon]
+            if codonString in self.codonComp: #if the codon is valid that means there's a matching AA as well
+                self.codonComp[codonString] += 1 #adds codonString to the valid key in codonComp
+                self.aaComp[self.rnaCodonTable[codonString]] += 1 #adds the valid AA to the valid key in aaComp
+            
 
         for character in inSeq: #deals with the nucleotide composition
             if character in self.nucComp:
@@ -66,7 +65,7 @@ class NucParams:
     def codonComposition(self):
         return self.codonComp
     def nucCount(self):
-        return sum(self.nucComp)
+        return sum(self.nucComp.values())
 
 
 
@@ -134,8 +133,8 @@ class ProteinParam :
         for char in self.protein: #iterates through each character in given input
             if char in self.aaComp: #checks to see if the character from the given input is a valid
                 self.aaComp[char] += 1
-        if self.aaCount() == 0: #If nothing valid is entered, then warn the user that their input is invalid
-            print('WARNING: No valid Amino Acid(s) were entered. All methods in the class will now return zero (0) :)')
+        # if self.aaCount() == 0: #If nothing valid is entered, then warn the user that their input is invalid
+        #     print('WARNING: No valid Amino Acid(s) were entered. All methods in the class will now return zero (0) :)')
     #private helper methods 
     #These methods are not meant to be accessed by anyone else therefore, I will be using name mangling to make them private.
     def __sumOfPosCharges(self,pH):
@@ -250,7 +249,7 @@ class FastAreader :
             
     def doOpen (self):
         ''' Handle file opens, allowing STDIN.'''
-        if self.fname is '':
+        if self.fname == '':
             return sys.stdin
         else:
             return open(self.fname)
