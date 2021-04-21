@@ -22,7 +22,7 @@ class GenomeAnalyzer:
         print(f'GC content = {contentGC:0.1f}%\n')
 
 
-        for codon, aa in sorted(self.myNuc.rnaCodonTable.items(), key=lambda a:a[1]):
+        for codon, aa in sorted(self.myNuc.rnaCodonTable.items(), key=lambda a:(a[1],a[0])):
             codonFreq = (self.myNuc.codonComposition()[codon] / self.myNuc.aaComposition()[aa]) * 100
             print (f'{codon} : {aa} {codonFreq:5.1f} ({self.myNuc.codonComposition()[codon]:6d})')
 
