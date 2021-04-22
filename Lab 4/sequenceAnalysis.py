@@ -1,14 +1,43 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: None
-"""Insert Module docstring"""
+'''
+sequenceAnalysis.py v1
+
+written by: Derfel Terciano (with some source code given by David Bernik)
+
+This module provides tools for biological data. These tools are mainly helpful for the bioinformatics field but can be used by anyone else.
+So far, the main functions of the module include: Nucleotide parameters, Protein parameters, and a FastA reader. This module will become heavily developed further down the line.
+Each of the objects in this module will also have its own design specs, overview, and assumptions in their respective docstrings.
+
+Objects in this class:
+    - NucParams([inString]) -> a collection of methods that can determine amino acid composition, nucleotide composition, codon composition, and nucletide count.
+        -Initialized with a string of nucleotides
+    - ProteinParam(protein(string type)) -> a collection of methods that can determine aacount, pI, aa composition, molar & mass extinc. coeff., and molec. weight.
+        -Initialized with a string of amino acids (also known as a protein)
+    - FastAreader([fname (a file name or path of type string)]) -> a collection of methods that can read and return FastA file info through either a file name or STDIN
+        -Initialized with a filename, path (both of these are string types) or through STDIN from the console.
+'''
 import numpy
 import sys
 
 
 #TODO: DOCUMENTATION AND EXCEPTIONAL CASES
 class NucParams:
-    '''Insert Documentation later'''
+    '''
+    Calculates compositional properties of a given string of nucleotides.
+
+    Written by Derfel Terciano
+
+    With a given string of nucleotides, the public methods will do the following:
+        -addSequence(sequence): updates all relevant tables and data structures within the object with the inputted string of nucs
+                -returns nothing
+        -aaComposition(): returns a dictionary of the composition of amino acids that are translated in the string of nucs
+        -nucComposition(): returns a dictionary of the composition of nucleotides with the string. This is based off the {ATCGUN} alphabet
+        -codonComposition(): returns the composition of valid codons in a given string of nucleotides. 
+            -(This means bases with N will be ignored and not be counted)
+        -nucCount(): returns the count (sum) of all nucleotides that are in the {ACTGUN} alphabet
+    '''
     rnaCodonTable = {
     # RNA codon table
     # U
@@ -35,17 +64,25 @@ class NucParams:
     dnaCodonTable = {key.replace('U','T'):value for key, value in rnaCodonTable.items()}
 
     def __init__ (self, inString=''):
-        self.nucComp = { 'A':0, 'T':0, 'C':0, 'G':0, 'U':0, 'N':0 } # nucleotide comp
-        self.aaComp = {aa:0 for aa in self.rnaCodonTable.values()} # amino acid comp
-        self.codonComp = {aa:0 for aa in self.rnaCodonTable} # codon comp
-        self.addSequence(inString)
+        '''
+        Initializes the NucParams object
+            parameter (optional): inString (string type)
+        '''
+        self.nucComp = { 'A':0, 'T':0, 'C':0, 'G':0, 'U':0, 'N':0 } # nucleotide composition dictionary
+        self.aaComp = {aa:0 for aa in self.rnaCodonTable.values()} # amino acid composition dictionary
+        self.codonComp = {aa:0 for aa in self.rnaCodonTable} # codon composition dictionary
+        self.addSequence(inString)#updates the dictionaries if the object is initialized with a string (which is optional)
 
 
     def addSequence (self, inSeq):
+        '''
+        updates the object's corresponding dictionaries with relevant info from an entered string
+            -parameters: inSeq (a string type)
+        '''
         inSeq = inSeq.replace(' ','').upper() #this has the possibility for input string to be DNA as well
         inSeqRNAonly = inSeq.replace('T','U') #converts DNA to RNA
 
-        for codonIndex in range(0,len(inSeqRNAonly),3): #deals with the codon comp
+        for codonIndex in range(0,len(inSeqRNAonly),3): #deals with the codon comp and increments in multiples of 3
             codonString = inSeqRNAonly[codonIndex:codonIndex+3] #extracts the string from the codonIndex
             if codonString in self.codonComp: #if the codon is valid that means there's a matching AA as well
                 self.codonComp[codonString] += 1 #adds codonString to the valid key in codonComp
@@ -53,21 +90,26 @@ class NucParams:
             
 
         for character in inSeq: #deals with the nucleotide composition
-            if character in self.nucComp:
+            if character in self.nucComp: #checks if the character in inSeq is a valid nucleotide in the {ATCGUN} alphabet
                 self.nucComp[character]  += 1
-        
-        
+
+
 
     def aaComposition(self):
+        '''returns a dictionary of the composition of amino acids that are translated in the string of nucs'''
         return self.aaComp
+
     def nucComposition(self):
+        '''returns a dictionary of the composition of nucleotides with the string. This is based off the {ATCGUN} alphabet'''
         return self.nucComp
+
     def codonComposition(self):
+        '''returns the composition of valid codons in a given string of nucleotides.'''
         return self.codonComp
+
     def nucCount(self):
+        '''returns the count (sum) of all nucleotides that are in the {ACTGUN} alphabet'''
         return sum(self.nucComp.values())
-
-
 
 class ProteinParam :
     '''
