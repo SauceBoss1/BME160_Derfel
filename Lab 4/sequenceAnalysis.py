@@ -17,6 +17,7 @@ Objects in this class:
         -Initialized with a string of amino acids (also known as a protein)
     - FastAreader([fname (a file name or path of type string)]) -> a collection of methods that can read and return FastA file info through either a file name or STDIN
         -Initialized with a filename, path (both of these are string types) or through STDIN from the console.
+    -More features coming soon?
 '''
 import numpy
 import sys
