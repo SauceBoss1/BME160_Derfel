@@ -6,7 +6,7 @@ import numpy
 import sys
 
 
-
+#TODO: DOCUMENTATION AND EXCEPTIONAL CASES
 class NucParams:
     '''Insert Documentation later'''
     rnaCodonTable = {
