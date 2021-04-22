@@ -60,6 +60,8 @@ class GenomeComparator:
                 print(f'{codon} : {aa} => {codonFreq1:5.1f} ({genome1CodonCount:6d}) | = | {codonFreq2:5.1f} ({genome2CodonCount:6d})')
 def main():
     genomes = GenomeComparator('testGenome.fa','haloVolc1_1-genes.fa')
-    #genomes = GenomeComparator() #i dont know how to input 2 files
+    #genomes = GenomeComparator() #i dont know how to input 2 files through command line
     genomes.genomeComparator()
-main()
+
+if __name__ == '__main__':
+    main()

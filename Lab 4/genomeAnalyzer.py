@@ -31,4 +31,6 @@ class GenomeAnalyzer:
 def main ():
     genome = GenomeAnalyzer()
     genome.analyzeGenome()
-main()
+
+if __name__ == '__main__':
+    main()
