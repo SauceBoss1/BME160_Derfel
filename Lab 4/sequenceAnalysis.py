@@ -6,7 +6,7 @@ sequenceAnalysis.py v1
 
 written by: Derfel Terciano (with some source code given by David Bernik)
 
-This module provides tools for biological data. These tools are mainly helpful for the bioinformatics field but can be used by anyone else.
+This module provides tools for biological data. These tools are mainly helpful for the bioinformatics field but can be used by anyone else. \n
 So far, the main functions of the module include: Nucleotide parameters, Protein parameters, and a FastA reader. This module will become heavily developed further down the line.
 Each of the objects in this module will also have its own design specs, overview, and assumptions in their respective docstrings.
 
@@ -23,7 +23,7 @@ import numpy
 import sys
 
 
-#TODO: DOCUMENTATION AND EXCEPTIONAL CASES
+#TODO: DOCUMENTATION AND EXCEPTIONAL CASES (CONSIDER ONLY Ns AS AN INPUT)
 class NucParams:
     '''
     Calculates compositional properties of a given string of nucleotides.
@@ -38,6 +38,10 @@ class NucParams:
         -codonComposition(): returns the composition of valid codons in a given string of nucleotides. 
             -(This means bases with N will be ignored and not be counted)
         -nucCount(): returns the count (sum) of all nucleotides that are in the {ACTGUN} alphabet
+
+    Assumptions:
+        - {ACTGN} is the only valid alphabet we will be using
+        - Codons (nucleotides of 3) will be ignored if they contain at least one 'N'
     '''
     rnaCodonTable = {
     # RNA codon table
@@ -125,6 +129,9 @@ class ProteinParam :
             -molarExtinction(,[cystine]): a float of the molar extinction coefficent of the protein (the default input is true; if False, Cystine calculations will be ignored)
             -massExtinction(,[cystine]): a float of the the mass extinction coefficient of the protein (the default input is true; if False, Cystine calculations will be ignored)
             -molecularWeight(): the TOTAL molecular weight of the given protein (a float) 
+    Notes: 
+    The pI is returned under the Lehninger method and not with the IPC protein method.
+    Therefore, use isoelectric.org to see if the pI returned is correct
 
     Input: String\n
     Output of all methods: Floats
