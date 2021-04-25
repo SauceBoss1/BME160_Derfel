@@ -84,17 +84,17 @@ class NucParams:
         updates the object's corresponding dictionaries with relevant info from an entered string
             -parameters: inSeq (a string type)
         '''
-        inSeq = inSeq.replace(' ','').upper() #this has the possibility for input string to be DNA as well
-        inSeqRNAonly = inSeq.replace('T','U') #converts DNA to RNA
+        inSeq = inSeq.replace(' ','').upper() #this makes sure that theres no spaces in sequence
 
-        for codonIndex in range(0,len(inSeqRNAonly),3): #deals with the codon comp and increments in multiples of 3
-            codonString = inSeqRNAonly[codonIndex:codonIndex+3] #extracts the string from the codonIndex
+        for codonIndex in range(0,len(inSeq),3): #deals with the codon comp and increments in multiples of 3
+            codonString = inSeq[codonIndex:codonIndex+3].replace('T','U') #extracts the string from the codonIndex and converts DNA to RNA
             if codonString in self.codonComp: #if the codon is valid that means there's a matching AA as well
                 self.codonComp[codonString] += 1 #adds codonString to the valid key in codonComp
                 self.aaComp[self.rnaCodonTable[codonString]] += 1 #adds the valid AA to the valid key in aaComp
             
 
         for character in inSeq: #deals with the nucleotide composition
+            character = character #makes the current char uppercase
             if character in self.nucComp: #checks if the character in inSeq is a valid nucleotide in the {ATCGUN} alphabet
                 self.nucComp[character]  += 1
 

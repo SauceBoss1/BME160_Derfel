@@ -64,7 +64,15 @@ class GenomeAnalyzer:
 
         #the loop below prints the codon usage of each codon
         for codon, aa in sorted(self.myNuc.rnaCodonTable.items(), key=lambda a:(a[1],a[0])): #ordered by AA and then by the codon itself
-            codonFreq = (self.myNuc.codonComposition()[codon] / self.myNuc.aaComposition()[aa]) * 100 #finds codon freq from the # of codons divided by # of amino acid of that codon
+
+            #the following if/else statment prevents a divide by zero error if there was no codon count for the current codon
+            if self.myNuc.aaComposition()[aa] == 0: #if there are no counts of the current aa, set to 1 to preven divide by zero error
+                currentAAcomp = 1
+            else:
+                currentAAcomp = self.myNuc.aaComposition()[aa]
+
+            
+            codonFreq = (self.myNuc.codonComposition()[codon] / currentAAcomp) * 100 #finds codon freq from the # of codons divided by # of amino acid of that codon
             print (f'{codon} : {aa} {codonFreq:5.1f} ({self.myNuc.codonComposition()[codon]:6d})')
 
 
