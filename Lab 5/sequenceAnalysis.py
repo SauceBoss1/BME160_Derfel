@@ -352,7 +352,7 @@ class OrfFinder:
                 if codon in self.stopCodons:
                     length = frame
 
-                    if startPos: 
+                    if startPos: #prevents checking element 0 in List
                         length = (codonPos+3) - startPos[0]
 
                     if (length > minLength) and startPos:
