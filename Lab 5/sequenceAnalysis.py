@@ -357,7 +357,7 @@ class OrfFinder:
 
                     if (length > minLength) and startPos:
                         self.saveOrf(startPos[0]+1, codonPos+3, length, frame)
-                    elif (not self.orfs) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
+                    elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
                         self.saveOrf(frame+1, codonPos+3, ((codonPos+3)-frame), frame)
                     startPos.clear()
 
