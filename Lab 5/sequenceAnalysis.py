@@ -282,7 +282,6 @@ class ProteinParam :
         else:
             return 0
 
-
 class FastAreader :
     ''' 
     Define objects to read FastA files.
@@ -329,3 +328,40 @@ class FastAreader :
                     sequence += ''.join(line.rstrip().split()).upper()
 
         yield header,sequence
+
+class OrfFinder:
+    def __init__(self,seq):
+        self.seq = seq.replace(' ','').upper()
+    
+    orfs = [ [], [], [] ]
+    startCodons = ('ATG','Null')
+    stopCodons = ('TAG', 'TAA', 'TGA')
+
+    def saveOrf(self, startPos, stopPos, length, frame):
+        self.orfs[frame].append((startPos, stopPos, length, frame+1))
+
+    def orfFinder(self,minLength = 100):
+        startPos = []
+        for frame in range(3):
+            for codonPos in range(frame,len(self.seq),3):
+                codon = self.seq[codonPos:codonPos+3]
+
+                if codon in self.startCodons:
+                    startPos.append(codonPos)
+                
+                if codon in self.stopCodons:
+                    length = frame
+
+                    if startPos: 
+                        length = (codonPos+3) - startPos[0]
+
+                    if (length > minLength) and startPos:
+                        self.saveOrf(startPos[0]+1, codonPos+3, length, frame)
+                    elif (not self.orfs) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
+                        self.saveOrf(frame+1, codonPos+3, ((codonPos+3)-frame), frame)
+                    startPos.clear()
+
+            if startPos and ((len(self.seq)-1)-startPos[0] > minLength):
+                self.saveOrf(startPos[0]+1, (len(self.seq)-1), ((len(self.seq)-1)-startPos[0]), frame)
+            startPos.clear()
+        return self.orfs
