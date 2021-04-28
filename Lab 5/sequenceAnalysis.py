@@ -358,7 +358,7 @@ class OrfFinder:
                         length = codonPos+3
                         startPos.append(0)
 
-                    if (length > minLength) and startPos:
+                    if (length > minLength) and startPos: #check if length of seq meets requirements 
                         self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
                     elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
@@ -374,11 +374,12 @@ class OrfFinder:
 
             if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists and meets length requirments
                 self.saveOrf(startPos[0]+1, len(self.seq), ((len(self.seq))-startPos[0]), frame)
-            if (not self.orfs[frame]):
+            if (not self.orfs[frame]): #if no ORFs have been identified, then the entire sequence is the gene
                 self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
         return self.orfs
 
+    #use equation to find the actual starts and stops
     def revCompOrfFinder(self, minLength=100):
         tempString = list(self.seq)
 
