@@ -363,7 +363,7 @@ class OrfFinder:
                     elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
 
-                    if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return entire seq
+                    if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop
                         self.saveOrf(1, codonPos+3, codonPos+3, frame)
 
                     if (len(startPos)>1): #if there are any other starts, check their lengths too
