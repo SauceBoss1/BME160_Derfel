@@ -363,7 +363,7 @@ class OrfFinder:
                     elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
 
-                    if (frame==1 or frame==2) and ((len(self.seq)-1)-startPos[0] == (len(self.seq)-1)-frame): #if the entire frame is a gene then return entire seq
+                    if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return entire seq
                         self.saveOrf(1, len(self.seq)-1, len(self.seq)-1, frame)
 
                     if (len(startPos)>1): #if there are any other starts, check their lengths too
@@ -378,3 +378,13 @@ class OrfFinder:
                 self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
         return self.orfs
+
+    def revCompOrfFinder(self, minLength=100):
+        tempString = list(self.seq)
+
+        chars = { 'A' : 'T', 'T': 'A', 'C' : 'G', 'G' : 'C'}
+        tempString = reversed([chars.get(base,base) for base in tempString])
+        self.seq=''.join(tempString)
+        self.orfs =[ [], [], [] ]
+
+        return(self.orfFinder(minLength))
