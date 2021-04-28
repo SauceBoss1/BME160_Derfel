@@ -350,18 +350,31 @@ class OrfFinder:
                     startPos.append(codonPos)
                 
                 if codon in self.stopCodons:
-                    length = frame
+                    length = 1
 
                     if startPos: #prevents checking element 0 in List
                         length = (codonPos+3) - startPos[0]
+                    else:
+                        length = codonPos+3
+                        startPos.append(0)
 
                     if (length > minLength) and startPos:
-                        self.saveOrf(startPos[0]+1, codonPos+3, length, frame)
+                        self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
                     elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
-                        self.saveOrf(frame+1, codonPos+3, ((codonPos+3)-frame), frame)
+                        self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
+
+                    if (frame==1 or frame==2) and ((len(self.seq)-1)-startPos[0] == (len(self.seq)-1)-frame): #if the entire frame is a gene then return entire seq
+                        self.saveOrf(1, len(self.seq)-1, len(self.seq)-1, frame)
+
+                    if (len(startPos)>1): #if there are any other starts, check their lengths too
+                        for eachStartPos in range(1,len(startPos)):
+                            if (codonPos+3)-startPos[eachStartPos] > minLength:
+                                self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
                     startPos.clear()
 
-            if startPos and ((len(self.seq)-1)-startPos[0] > minLength):
-                self.saveOrf(startPos[0]+1, (len(self.seq)-1), ((len(self.seq)-1)-startPos[0]), frame)
+            if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists and meets length requirments
+                self.saveOrf(startPos[0]+1, len(self.seq), ((len(self.seq))-startPos[0]), frame)
+            if (not self.orfs[frame]):
+                self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
         return self.orfs
