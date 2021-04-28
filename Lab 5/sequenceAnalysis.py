@@ -364,7 +364,7 @@ class OrfFinder:
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
 
                     if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return entire seq
-                        self.saveOrf(1, len(self.seq)-1, len(self.seq)-1, frame)
+                        self.saveOrf(1, codonPos+3, codonPos+3, frame)
 
                     if (len(startPos)>1): #if there are any other starts, check their lengths too
                         for eachStartPos in range(1,len(startPos)):
