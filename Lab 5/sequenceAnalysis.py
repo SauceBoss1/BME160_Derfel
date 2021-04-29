@@ -340,7 +340,7 @@ class OrfFinder:
     def saveOrf(self, startPos, stopPos, length, frame):
         self.orfs[frame].append((startPos, stopPos, length, frame+1))
 
-    def orfFinder(self,minLength = 100, largestGene = False):
+    def orfFinder(self,minLength = 100, biggestGeneOnly = False):
         startPos = []
         for frame in range(3):
             for codonPos in range(frame,len(self.seq),3):
@@ -366,7 +366,7 @@ class OrfFinder:
                     if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop
                         self.saveOrf(1, codonPos+3, codonPos+3, frame)
 
-                    if (len(startPos)>1) and largestGene: #if there are any other starts, check their lengths too (only if enabled)
+                    if (len(startPos)>1) and biggestGeneOnly: #if there are any other starts, check their lengths too (only if enabled)
                         for eachStartPos in range(1,len(startPos)):
                             if (codonPos+3)-startPos[eachStartPos] > minLength:
                                 self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
@@ -380,7 +380,7 @@ class OrfFinder:
         return self.orfs
 
     #use equation to find the actual starts and stops
-    def revCompOrfFinder(self, minLength=100, largestGene=False):
+    def revCompOrfFinder(self, minLength=100, biggestGeneOnly=False):
         tempString = list(self.seq)
 
         chars = { 'A' : 'T', 'T': 'A', 'C' : 'G', 'G' : 'C'}
@@ -388,13 +388,13 @@ class OrfFinder:
         self.seq=''.join(tempString)
         self.orfs =[ [], [], [] ]
         
-        return(self.orfFinder(minLength,largestGene))
+        return(self.orfFinder(minLength,biggestGeneOnly))
 
-    def finalORFset(self, minLength = 100, largestGene=False):
+    def finalORFset(self, minLength = 100, biggestGeneOnly=False):
         finalORFs = []
 
-        topStrand = self.orfFinder(minLength, largestGene)
-        bottomStrand = self.revCompOrfFinder(minLength,largestGene)
+        topStrand = self.orfFinder(minLength, biggestGeneOnly)
+        bottomStrand = self.revCompOrfFinder(minLength, biggestGeneOnly)
 
         for frame in range(0,len(topStrand)):
             for validORF in topStrand[frame]:
