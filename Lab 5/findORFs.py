@@ -4,7 +4,9 @@
 '''Doc String'''
 
 import sequenceAnalysis
-
+import sys
+from importlib import reload
+reload(sequenceAnalysis)
 
 
 
@@ -41,7 +43,7 @@ class CommandLine() :
                                              usage = '%(prog)s [options] -option1[default] <input >output'
                                              )
         self.parser.add_argument('-lG', '--longestGene', action = 'store', nargs='?', const=True, default=False, help='longest Gene in an ORF')
-        self.parser.add_argument('-mG', '--minGene', type=int, choices= (100,200,300,500,1000), default=100, action = 'store', help='minimum Gene length')
+        self.parser.add_argument('-mG', '--minGene', type=int, choices= (0,100,200,300,500,1000), default=100, action = 'store', help='minimum Gene length')
         self.parser.add_argument('-s', '--start', action = 'append', default = ['ATG'],nargs='?', 
                                  help='start Codon') #allows multiple list options
         self.parser.add_argument('-t', '--stop', action = 'append', default = ['TAG','TGA','TAA'],nargs='?', help='stop Codon') #allows multiple list options
@@ -51,6 +53,24 @@ class CommandLine() :
         else :
             self.args = self.parser.parse_args(inOpts)
 
+
+def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', outFile=''):
+    genome = sequenceAnalysis.FastAreader(inFile)
+    if outFile=='':
+        pass
+    else:
+        file = open(outFile, 'w')
+        sys.stdout = file
+
+    for header, seq in genome.readFasta():
+        print(header)
+        orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons)
+        for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
+            print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}') #{seq[currentOrf[0]-1:currentOrf[1]]}
+        print('\n')
+    if outFile =='': pass
+    else: file.close()
+
 ########################################################################
 # Main
 # Here is the main program
@@ -58,12 +78,11 @@ class CommandLine() :
 #
 ########################################################################
    
-def main(inFile = None, options = None):
+def main(inFile = '', options = None):
     '''
     Find some genes.  
     '''
     thisCommandLine = CommandLine(options)
-    
     ###### replace the code between comments.
     print (thisCommandLine.args)
     # thisCommandLine.args.longestGene is True if only the longest Gene is desired
@@ -72,6 +91,7 @@ def main(inFile = None, options = None):
     # thisCommandLine.args.minGene is the minimum Gene length to include
     #
     #######
+    fileFormatter(thisCommandLine.args.start, thisCommandLine.args.stop, thisCommandLine.args.minGene, thisCommandLine.args.longestGene, inFile, '')
     
 if __name__ == "__main__":
-    main(inFile = 'tass2.fa', options = ['-mG=300', '-lG']) # delete this stuff if running from commandline
+    main() # delete this stuff if running from commandline

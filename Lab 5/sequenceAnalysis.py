@@ -334,15 +334,16 @@ class OrfFinder:
         self.seq = seq.replace(' ','').upper()
         self.startCodons = startCodon
         self.stopCodons = stopCodon
-    
-    orfs = [ [], [], [] ]
+        self.orfs = [ [], [], [] ]
 
     def saveOrf(self, startPos, stopPos, length, frame):
         self.orfs[frame].append((startPos, stopPos, length, frame+1))
 
-    def orfFinder(self,minLength = 100, biggestGeneOnly = False):
+    def orfFinder(self,minLength = 100, biggestGeneOnly = True):
         startPos = []
+        stopPos = []
         for frame in range(3):
+            stopPos.clear()
             for codonPos in range(frame,len(self.seq),3):
                 codon = self.seq[codonPos:codonPos+3]
 
@@ -350,30 +351,31 @@ class OrfFinder:
                     startPos.append(codonPos)
                 
                 if codon in self.stopCodons:
-                    length = 1
-
+                    length = 0
+                    stopPos.append(codonPos)
                     if startPos: #prevents checking element 0 in List
                         length = (codonPos+3) - startPos[0]
-                    else:
-                        length = codonPos+3
-                        startPos.append(0)
 
                     if (length > minLength) and startPos: #check if length of seq meets requirements 
                         self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
-                    elif (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength): #check if there are no starts, there are not current ORFs, and meets length reqs
-                        self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
 
-                    if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop
-                        self.saveOrf(1, codonPos+3, codonPos+3, frame)
+                    if startPos:
+                        if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop
+                            self.saveOrf(1, codonPos+3, codonPos+3, frame)
 
-                    if (len(startPos)>1) and biggestGeneOnly: #if there are any other starts, check their lengths too (only if enabled)
+                    if (len(startPos)>1) and not biggestGeneOnly: #if there are any other starts, check their lengths too (only if enabled)
                         for eachStartPos in range(1,len(startPos)):
                             if (codonPos+3)-startPos[eachStartPos] > minLength:
                                 self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
                     startPos.clear()
+                
+                if (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, and meets length reqs
+                        self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
+                        startPos.clear()
 
             if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists and meets length requirments
                 self.saveOrf(startPos[0]+1, len(self.seq), ((len(self.seq))-startPos[0]), frame)
+
             if (not self.orfs[frame]): #if no ORFs have been identified, then the entire sequence is the gene
                 self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
@@ -390,18 +392,18 @@ class OrfFinder:
         
         return(self.orfFinder(minLength,biggestGeneOnly))
 
-    def finalORFset(self, minLength = 100, biggestGeneOnly=False):
-        finalORFs = []
+    def finalORFlist(self, minLength = 100, biggestGeneOnly=False):
+        finalORFs = [] #must be ordered
 
         topStrand = self.orfFinder(minLength, biggestGeneOnly)
         bottomStrand = self.revCompOrfFinder(minLength, biggestGeneOnly)
 
         for frame in range(0,len(topStrand)):
             for validORF in topStrand[frame]:
-                finalORFs.append(validORF)
+                finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}'))
         
         for frame in range(0,len(bottomStrand)):
             for validORF in bottomStrand[frame]:
-                finalORFs.append((((len(self.seq)-validORF[1])+1),((len(self.seq)-validORF[0])+1),validORF[2],-validORF[3]))
+                finalORFs.append((((len(self.seq)-validORF[1])+1), ((len(self.seq)-validORF[0])+1), validORF[2], f'-{validORF[3]}')) #we must adjust reverse orfs into the correct coordinate space
         self.orfs=[ [], [], [] ]
         return finalORFs
