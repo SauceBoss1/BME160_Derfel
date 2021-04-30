@@ -329,7 +329,7 @@ class FastAreader :
 
         yield header,sequence
 
-class OrfFinder:
+class OrfFinder:    
     def __init__(self,seq, startCodon = ['ATG'], stopCodon= ['TAG', 'TAA', 'TGA']):
         self.seq = seq.replace(' ','').upper()
         self.startCodons = startCodon
