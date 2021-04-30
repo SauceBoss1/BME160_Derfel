@@ -1,4 +1,3 @@
-Namespace(longestGene=True, minGene=300, start=['ATG'], stop=['TAG', 'TGA', 'TAA'])
 tass2 NODE_159_length_75728_cov_97.549133
 +1 57166..61908 4743
 -1  8192..11422 3231

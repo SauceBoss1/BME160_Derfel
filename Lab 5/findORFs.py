@@ -68,6 +68,7 @@ def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', 
         for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
             print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}') #{seq[currentOrf[0]-1:currentOrf[1]]}
         print('\n')
+
     if outFile =='': pass
     else: file.close()
 
@@ -84,7 +85,7 @@ def main(inFile = '', options = None):
     '''
     thisCommandLine = CommandLine(options)
     ###### replace the code between comments.
-    print (thisCommandLine.args)
+    #print (thisCommandLine.args)
     # thisCommandLine.args.longestGene is True if only the longest Gene is desired
     # thisCommandLine.args.start is a list of start codons
     # thisCommandLine.args.stop is a list of stop codons
