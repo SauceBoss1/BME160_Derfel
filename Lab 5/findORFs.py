@@ -28,7 +28,7 @@ class CommandLine() :
     set as an option using add_argument, then myCommandLine.args.requiredbool will
     name that option.
  
-    '''
+    ''' 
     
     def __init__(self, inOpts=None) :
         '''
