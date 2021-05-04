@@ -64,7 +64,7 @@ def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', 
         file = open(outFile, 'w')
         sys.stdout = file
 
-    for header, seq in genome.readFasta():
+    for header, seq in genome.readFasta():  #print a message if the minGene > seq length
         print(header)
         orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons)
         for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
