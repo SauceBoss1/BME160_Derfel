@@ -3,6 +3,8 @@
 # Group Members: None
 '''Doc String'''
 
+#ADD PSEUDO CODE BEFORE TURNING IN
+
 import sequenceAnalysis
 import sys
 from importlib import reload
