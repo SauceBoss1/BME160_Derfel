@@ -1,4 +1,4 @@
-test => ATGATGTAA
+test
 +1     1..    9  9
 +3     1..    9  9
 -1     1..    9  9
@@ -7,7 +7,7 @@ test => ATGATGTAA
 +2     1..    4  4
 
 
-test2 => AATGATGTAA
+test2
 +1     1..   10 10
 +2     1..   10 10
 -1     1..   10 10
@@ -17,7 +17,7 @@ test2 => AATGATGTAA
 +3     1..    5  5
 
 
-test3 => AAATGATGTAA
+test3
 +2     1..   11 11
 +3     1..   11 11
 -1     1..   11 11
@@ -27,7 +27,7 @@ test3 => AAATGATGTAA
 +1     1..    6  6
 
 
-test-1 => TTACATCAT
+test-1
 +1     1..    9  9
 +2     1..    9  9
 +3     1..    9  9
@@ -36,7 +36,7 @@ test-1 => TTACATCAT
 -2     6..    9  4
 
 
-test-2 => TTACATCATA
+test-2
 +1     1..   10 10
 +2     1..   10 10
 +3     1..   10 10
@@ -46,7 +46,7 @@ test-2 => TTACATCATA
 -3     6..   10  5
 
 
-test-3 => TTACATCATAA
+test-3
 +1     1..   11 11
 +2     1..   11 11
 +3     1..   11 11
@@ -56,7 +56,7 @@ test-3 => TTACATCATAA
 -1     6..   11  6
 
 
-test1A => ATGATGTAAA
+test1A
 +3     1..   10 10
 -1     1..   10 10
 -2     1..   10 10
@@ -65,7 +65,7 @@ test1A => ATGATGTAAA
 +2     1..    4  4
 
 
-test2A => AATGATGTAAA
+test2A
 +1     1..   11 11
 -1     1..   11 11
 -2     1..   11 11
@@ -75,7 +75,7 @@ test2A => AATGATGTAAA
 +3     1..    5  5
 
 
-test3A => AAATGATGTAAA
+test3A
 +2     1..   12 12
 -1     1..   12 12
 -2     1..   12 12
@@ -85,7 +85,7 @@ test3A => AAATGATGTAAA
 +1     1..    6  6
 
 
-test-1A => ATTACATCAT
+test-1A
 +1     1..   10 10
 +2     1..   10 10
 +3     1..   10 10
@@ -94,7 +94,7 @@ test-1A => ATTACATCAT
 -2     7..   10  4
 
 
-test-2A => AATTACATCATA
+test-2A
 +1     1..   12 12
 +2     1..   12 12
 +3     1..   12 12
@@ -104,7 +104,7 @@ test-2A => AATTACATCATA
 -3     8..   12  5
 
 
-test-3A => AATTACATCATAA
+test-3A
 +1     1..   13 13
 +2     1..   13 13
 +3     1..   13 13

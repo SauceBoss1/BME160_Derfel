@@ -66,10 +66,14 @@ def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', 
 
     for header, seq in genome.readFasta():  #print a message if the minGene > seq length
         print(header)
-        orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons)
-        for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
-            print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}') #{seq[currentOrf[0]-1:currentOrf[1]]}
-        print('\n')
+
+        if len(seq) < minGene: #if the minGenelength is bigger than seq length, algorithm will not function properly
+            print('The specified minimum gene length is bigger than the length of the sequence.\n\tChange the genelength for this program to work. \n')
+        else:
+            orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons)
+            for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
+                print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}') #{seq[currentOrf[0]-1:currentOrf[1]]}
+            print('\n')
 
     if outFile =='': pass
     else: file.close()

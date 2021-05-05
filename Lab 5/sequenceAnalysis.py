@@ -23,7 +23,6 @@ import numpy
 import sys
 
 
-#TODO: DOCUMENTATION AND EXCEPTIONAL CASES (CONSIDER ONLY Ns AS AN INPUT)
 class NucParams:
     '''
     Calculates compositional properties of a given string of nucleotides.
@@ -369,7 +368,7 @@ class OrfFinder:
                                 self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
                     startPos.clear()
                 
-                if (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, and meets length reqs
+                if (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, this is the only stop and meets length reqs
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
                         startPos.clear()
 
