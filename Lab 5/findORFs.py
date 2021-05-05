@@ -3,7 +3,41 @@
 # Group Members: None
 '''Doc String'''
 
-#ADD PSEUDO CODE BEFORE TURNING IN
+#PSEUDO CODE FOR orfFinder METHOD IN sequenceAnalysis.orfFinder
+
+#########################################################################################################
+#lists that are a MUST: startCodons and stopCodons
+#lists needed: startPosition and StopPosition
+#
+#for frames in frame 1, 2, 3 (this will be used to shift the search by 1 character to the right):
+#   (remember) clear the stopPosition list
+#   for codonPosition from range (frames to the length of the sequence)
+#       codon = extract actual codon nucleotides using codon position       
+#
+#       if codon is a start codon:
+#           append the current codon position
+#
+#
+#       if codon is a stop codon:
+#           append the current position to stopPosition
+#           if startPos is not empty:
+#               if length reqs have been met:
+#                   save current ORF info
+#               if we have shifted frames (i.e not frame 1) and the startPos[0] is the same as the frame:
+#                   save current ORF info that starts at position 1
+#               if multiple starts have been found (only if this option is enabled):
+#                   save ORF info of all of those (from each start to current codonPos)
+#               clear startPos list
+#       if there no other ORFs in the frame (and) there are not starts (and) this is the only stop found:
+#          save ORF info if the len requirements have been met (this is a dangling stop)
+#           clear startPos list
+#
+#   if we're at the end, and there is still a start codon:
+#       save ORF if length reqs are met from start pos to the end of the seq
+#   if no ORFs have been found:
+#       save entire length as an ORF since it could be a potential gene candidate
+##########################################################################################################
+
 
 import sequenceAnalysis
 import sys
