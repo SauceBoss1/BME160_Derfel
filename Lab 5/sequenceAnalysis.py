@@ -328,7 +328,11 @@ class FastAreader :
 
         yield header,sequence
 
-class OrfFinder:    
+class OrfFinder:
+    # if (frame != 0) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop (this is also a dangling stop)
+    #     self.saveOrf(1, codonPos+3, codonPos+3, frame)
+    #this ^^^ is some throw away code that may be useful in the future
+
     def __init__(self,seq, startCodon = ['ATG'], stopCodon= ['TAG', 'TAA', 'TGA']):
         self.seq = seq.replace(' ','').upper()
         self.startCodons = startCodon
@@ -354,21 +358,20 @@ class OrfFinder:
                     stopPos.append(codonPos)
                     if startPos: #prevents checking element 0 in List
                         length = (codonPos+3) - startPos[0]
-
-                    if (length > minLength) and startPos: #check if length of seq meets requirements 
-                        self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
-
-                    if startPos:
-                        if (frame==1 or frame==2) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop
+                        
+                        if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength): #dangling stop if there are start codons in the beginning
                             self.saveOrf(1, codonPos+3, codonPos+3, frame)
+
+                        if (length > minLength): #check if length of seq meets requirements 
+                            self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
 
                     if (len(startPos)>1) and not biggestGeneOnly: #if there are any other starts, check their lengths too (only if enabled)
                         for eachStartPos in range(1,len(startPos)):
                             if (codonPos+3)-startPos[eachStartPos] > minLength:
                                 self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
                     startPos.clear()
-                
-                if (not self.orfs[frame]) and (not startPos) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, this is the only stop and meets length reqs
+            
+                    if (not self.orfs[frame]) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, this is the only stop and meets length reqs
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
                         startPos.clear()
 
@@ -404,5 +407,6 @@ class OrfFinder:
         for frame in range(0,len(bottomStrand)):
             for validORF in bottomStrand[frame]:
                 finalORFs.append((((len(self.seq)-validORF[1])+1), ((len(self.seq)-validORF[0])+1), validORF[2], f'-{validORF[3]}')) #we must adjust reverse orfs into the correct coordinate space
+
         self.orfs=[ [], [], [] ]
         return finalORFs
