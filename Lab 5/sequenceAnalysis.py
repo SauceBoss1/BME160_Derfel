@@ -423,7 +423,7 @@ class OrfFinder:
             if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists at the end of the sequence and meets length requirments then its a dangling start
                 self.saveOrf(startPos[0]+1, len(self.seq), ((len(self.seq))-startPos[0]), frame)
 
-            if (not self.orfs[frame]): #if no ORFs have been identified, then the entire sequence is the gene
+            if (not self.orfs[frame]) and (len(self.seq) > minLength): #if no ORFs have been identified, then the entire sequence is the gene
                 self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
 
