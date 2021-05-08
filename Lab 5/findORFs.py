@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
-# Group Members: None
+# Group Members: Sagarika Kannoly (skannoly)
 '''Doc String'''
 
 #PSEUDO CODE FOR orfFinder METHOD IN sequenceAnalysis.orfFinder

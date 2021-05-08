@@ -11,13 +11,13 @@ reload(sequenceAnalysis)
 
 #testGene = 'ATGATGTAA'
 seq=''
-with open('tass2.fa','r') as f:
-    for line in f:
-        if line.startswith ('>'):
-            header = line[1:].rstrip()
-            seq = ''
-        else :
-            seq += ''.join(line.rstrip().split()).upper()
+# with open('tass2.fa','r') as f:
+#     for line in f:
+#         if line.startswith ('>'):
+#             header = line[1:].rstrip()
+#             seq = ''
+#         else :
+#             seq += ''.join(line.rstrip().split()).upper()
 def reverseStr(seq):
     tempString = list(seq)
 
@@ -26,9 +26,9 @@ def reverseStr(seq):
     seq = ''.join(tempString)
     return seq
 
-print(len(reverseStr(seq)))
-orf = sequenceAnalysis.OrfFinder(reverseStr(seq))
-orf1=orf.finalORFlist(100, False)
+#print(len(reverseStr(seq)))
+orf = sequenceAnalysis.OrfFinder('TTA CAT CAT')
+orf1=orf.finalORFlist(0, False)
 #print(orf1)
 for orf in sorted(orf1, key=lambda a:(a[2]), reverse= True):
     print(orf)

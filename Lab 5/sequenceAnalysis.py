@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
-# Group Members: None
+# Group Members: Sagarika Kannoly (skannoly)
 '''
-sequenceAnalysis.py v1
+sequenceAnalysis.py v2
 
 written by: Derfel Terciano (with some source code given by David Bernik)
 
@@ -17,7 +17,8 @@ Objects in this class:
         -Initialized with a string of amino acids (also known as a protein)
     - FastAreader([fname (a file name or path of type string)]) -> a collection of methods that can read and return FastA file info through either a file name or STDIN
         -Initialized with a filename, path (both of these are string types) or through STDIN from the console.
-    -More features coming soon?
+    -OrfFinder(self,seq, startCodon = ['ATG'], stopCodon= ['TAG', 'TAA', 'TGA']) -> a collection of methods that finds possible Open Reading Frames
+        -Initialized with a string type sequence AT MOST
 '''
 import numpy
 import sys
@@ -329,84 +330,131 @@ class FastAreader :
         yield header,sequence
 
 class OrfFinder:
+    '''
+    Find all possible Open Reading Frames.
+
+    Written by: Derfel Terciano
+
+    Instantiation: takes in a sequence of strings at most, defining start and stop codons are optional
+        -default startCodon = ['ATG'] stopCodon = ['TAG', 'TAA', 'TGA']
+
+    methods (all public):
+        -saveOrf(self, startPos, stopPos, length, frame) -> save necessary ORF info
+            -returns: nothing
+        -orfFinder(self,minLength = 100, biggestGeneOnly = True) -> algorithm that finds valid Open Reading Frames
+            -returns: an advanced list structure (seperated with independent list of ORFs found in frames) of ORFs
+        -revCompOrfFinder(self, minLength=100, biggestGeneOnly=False) -> same as orfFinder but finds reverse complement of seq and then uses orfFinder algorithm
+            -returns: same as orfFind however, positioning and frame numbers are not adjusted
+        -finalORFlist(self, minLength = 100, biggestGeneOnly=False) -> find the ORFs of both main seq strand and rev complement of the strand
+            -returns: a single list of all ORFs found on both top and bottom (revComp) strand. All positions are adjusted to fit positioning of top strand 
+    '''
     # if (frame != 0) and ((codonPos+3)-startPos[0] == (codonPos+3)-frame): #if the entire frame is a gene then return seq up to stop (this is also a dangling stop)
     #     self.saveOrf(1, codonPos+3, codonPos+3, frame)
     #this ^^^ is some throw away code that may be useful in the future
 
-    def __init__(self,seq, startCodon = ['ATG'], stopCodon= ['TAG', 'TAA', 'TGA']):
-        self.seq = seq.replace(' ','').upper()
-        self.startCodons = startCodon
+    def __init__(self,seq, startCodon = ['ATG'], stopCodon = ['TAG', 'TAA', 'TGA']):
+        '''Instantiates object by taking in a string type AT MOST'''
+        self.seq = seq.replace(' ','').upper() #cleans string
+        self.startCodons = startCodon 
         self.stopCodons = stopCodon
-        self.orfs = [ [], [], [] ]
+        self.orfs = [ [], [], [] ] # this will be where all found ORFs will be stored  must be organized by frame in order for algorithm to condition on frame related tests
 
     def saveOrf(self, startPos, stopPos, length, frame):
-        self.orfs[frame].append((startPos, stopPos, length, frame+1))
+        '''Save ORF start/stop positions, length, and frame'''
+        self.orfs[frame].append((startPos, stopPos, length, frame+1)) #saves specified ORF info
+        #ORFs are saved in a tuple with the following order:
+        #   startPos, stopPos, length, and frame
 
     def orfFinder(self,minLength = 100, biggestGeneOnly = True):
-        startPos = []
-        stopPos = []
-        for frame in range(3):
-            stopPos.clear()
-            for codonPos in range(frame,len(self.seq),3):
-                codon = self.seq[codonPos:codonPos+3]
+        '''Find all valid ORFs with an algorithm'''
+        startPos = [] #important to save start Codon positions
+        stopPos = [] #used to check whether the stop codon is the first codon
 
-                if codon in self.startCodons:
+        for frame in range(3): #shifts entire algorithm by one frame
+            stopPos.clear()
+            for codonPos in range(frame,len(self.seq),3): #iterates through sequence by 3s with the frame being the starting point
+                codon = self.seq[codonPos:codonPos+3] #extracts what codon we are reading right now
+
+                if codon in self.startCodons: #start codon positions must be appended into start list
                     startPos.append(codonPos)
                 
-                if codon in self.stopCodons:
-                    length = 0
-                    stopPos.append(codonPos)
-                    if startPos: #prevents checking element 0 in List
-                        length = (codonPos+3) - startPos[0]
-                        
-                        if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength): #dangling stop if there are start codons in the beginning
-                            self.saveOrf(1, codonPos+3, codonPos+3, frame)
+                if codon in self.stopCodons: #stop codons will go through a series of tests to determine whether or not we have found an ORF
+                    stopPos.append(codonPos) #add the current stop to stopPos list
+                    if not biggestGeneOnly: #this enables algorithm for every punitive gene
+                        if startPos: #prevents checking element 0 in List
+                            length = (codonPos+3) - startPos[0] #finds length
+                            
+                            if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength):
+                            # if this is the first stop and no other ORFs have been found, then this is a dangling stop regardless if there's a start codon
+                            #   (this seems to be what's happening in tass2 which is very strange for me)
+                                self.saveOrf(1, codonPos+3, codonPos+3, frame)
+                            
+                            if (length > minLength) and (startPos[0] != 0): #check if length of seq meets requirements and if does meet reqs, save info
+                                # if the first element of the start is a 0, that position will be taken care of by the dangling stop
+                                # this makes sure that we don't have any repeats
+                                self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
 
-                        if (length > minLength): #check if length of seq meets requirements 
-                            self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
+                        if (len(startPos)>1): #if there are any other starts, check their lengths too
+                            for eachStartPos in range(1,len(startPos)): #this does through the startPos list (except element 0 since that has been accounted for already)
+                                if (codonPos+3)-startPos[eachStartPos] > minLength:
+                                    self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
 
-                    if (len(startPos)>1) and not biggestGeneOnly: #if there are any other starts, check their lengths too (only if enabled)
-                        for eachStartPos in range(1,len(startPos)):
-                            if (codonPos+3)-startPos[eachStartPos] > minLength:
-                                self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
-                    startPos.clear()
+                        startPos.clear()
+                    else:
+                        if startPos: #prevents checking element 0 in List
+                            length = (codonPos+3) - startPos[0] #finds length
+                            
+                            if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength):
+                            # if this is the first stop and no other ORFs have been found, then this is a dangling stop regardless if there's a start codon
+                            #   (this seems to be what's happening in tass2 which is very strange for me)
+                                self.saveOrf(1, codonPos+3, codonPos+3, frame)
+                            
+                            elif (length > minLength): #check if length of seq meets requirements and if does meet reqs, save info
+                                self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
+
+                        startPos.clear() #ensures that all starts from this current ORF doesn't interfere with other ORFs
             
-                    if (not self.orfs[frame]) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1): #check if there are no starts, there are not current ORFs, this is the only stop and meets length reqs
+                    if (not self.orfs[frame]) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1) and (not startPos):
+                    # check if there are no starts, there are no current ORFs, this is the only stop and meets length reqs then this is a dangling stop as well
+                    #   (this should be the correct way to find dangling stops, which works for the lab5 test but not with the tass2 file)
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
                         startPos.clear()
 
-            if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists and meets length requirments
+            if startPos and ((len(self.seq)-1)-startPos[0] > minLength): #if a start position still exists at the end of the sequence and meets length requirments then its a dangling start
                 self.saveOrf(startPos[0]+1, len(self.seq), ((len(self.seq))-startPos[0]), frame)
 
             if (not self.orfs[frame]): #if no ORFs have been identified, then the entire sequence is the gene
                 self.saveOrf(1, len(self.seq), len(self.seq), frame)
             startPos.clear()
+
         return self.orfs
 
     #use equation to find the actual starts and stops
     def revCompOrfFinder(self, minLength=100, biggestGeneOnly=False):
-        tempString = list(self.seq)
+        '''Find all valid ORFs of the reverse complement of the sequence'''
+        tempString = list(self.seq) #turn the string into a list first
 
-        chars = { 'A' : 'T', 'T': 'A', 'C' : 'G', 'G' : 'C'}
-        tempString = reversed([chars.get(base,base) for base in tempString])
-        self.seq=''.join(tempString)
-        self.orfs =[ [], [], [] ]
+        chars = { 'A' : 'T', 'T': 'A', 'C' : 'G', 'G' : 'C'} #characters that get swapped
+        tempString = reversed([chars.get(base,base) for base in tempString]) #swaps the character in the list for its complement given in the chars dictionary
+        self.seq=''.join(tempString) #turn everything back into string
+        self.orfs =[ [], [], [] ] #clear the orf list for the next call of the orf algorithm
         
         return(self.orfFinder(minLength,biggestGeneOnly))
 
     def finalORFlist(self, minLength = 100, biggestGeneOnly=False):
+        '''Find the ORFs of the top and bottom strand and its correct codon positions'''
         finalORFs = [] #must be ordered
 
-        topStrand = self.orfFinder(minLength, biggestGeneOnly)
-        bottomStrand = self.revCompOrfFinder(minLength, biggestGeneOnly)
+        topStrand = self.orfFinder(minLength, biggestGeneOnly) #finds top strand orfd
+        bottomStrand = self.revCompOrfFinder(minLength, biggestGeneOnly) #finds bottom strand orfs
 
-        for frame in range(0,len(topStrand)):
-            for validORF in topStrand[frame]:
-                finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}'))
+        for frame in range(0,len(topStrand)): 
+            for validORF in topStrand[frame]: # due to the nature of the orf list, we must iterate through an advanced list structure and append all orfs found
+                finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}')) 
         
         for frame in range(0,len(bottomStrand)):
-            for validORF in bottomStrand[frame]:
+            for validORF in bottomStrand[frame]: #does the samething as the abover for loops except this deals with the reverse strand
                 finalORFs.append((((len(self.seq)-validORF[1])+1), ((len(self.seq)-validORF[0])+1), validORF[2], f'-{validORF[3]}')) #we must adjust reverse orfs into the correct coordinate space
 
-        self.orfs=[ [], [], [] ]
+        self.orfs=[ [], [], [] ] #makes sure to empty the orf list out for next use of orf algorithm
         return finalORFs
