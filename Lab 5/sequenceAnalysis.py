@@ -415,7 +415,7 @@ class OrfFinder:
                         startPos.clear() #ensure that all starts from this current ORF doesn't interfere with other ORFs
             
                     if (not self.orfs[frame]) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1) and (not startPos):
-                    # check if there are no starts, there are no current ORFs, this is the only stop and meets length reqs then this is a dangling stop as well
+                    # checks if there are no starts, there are no current ORFs, this is the only stop and meets length reqs then this is a dangling stop as well
                     #   (this should be the correct way to find dangling stops, which works for the lab5 test but not with the tass2 file)
                         self.saveOrf(1, codonPos+3, ((codonPos+3)), frame)
                         startPos.clear()
