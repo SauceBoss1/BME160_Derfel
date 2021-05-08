@@ -380,7 +380,7 @@ class OrfFinder:
                 
                 if codon in self.stopCodons: #stop codons will go through a series of tests to determine whether or not we have found an ORF
                     stopPos.append(codonPos) #add the current stop to stopPos list
-                    if not biggestGeneOnly: #enable algorithm for every punitive gene
+                    if not biggestGeneOnly: #enables algorithm for every punitive gene
                         if startPos: #prevent checking element 0 in List
                             length = (codonPos+3) - startPos[0] #find length
                             
