@@ -368,21 +368,21 @@ class OrfFinder:
     def orfFinder(self,minLength = 100, biggestGeneOnly = True):
         '''Find all valid ORFs with an algorithm'''
         startPos = [] #important to save start Codon positions
-        stopPos = [] #used to check whether the stop codon is the first codon
+        stopPos = [] #check whether the stop codon is the first codon
 
-        for frame in range(3): #shifts entire algorithm by one frame
+        for frame in range(3): #shift entire algorithm by one frame
             stopPos.clear()
-            for codonPos in range(frame,len(self.seq),3): #iterates through sequence by 3s with the frame being the starting point
-                codon = self.seq[codonPos:codonPos+3] #extracts what codon we are reading right now
+            for codonPos in range(frame,len(self.seq),3): #iterate through sequence by 3s with the frame being the starting point
+                codon = self.seq[codonPos:codonPos+3] #extract what codon we are reading right now
 
                 if codon in self.startCodons: #start codon positions must be appended into start list
                     startPos.append(codonPos)
                 
                 if codon in self.stopCodons: #stop codons will go through a series of tests to determine whether or not we have found an ORF
                     stopPos.append(codonPos) #add the current stop to stopPos list
-                    if not biggestGeneOnly: #this enables algorithm for every punitive gene
-                        if startPos: #prevents checking element 0 in List
-                            length = (codonPos+3) - startPos[0] #finds length
+                    if not biggestGeneOnly: #enable algorithm for every punitive gene
+                        if startPos: #prevent checking element 0 in List
+                            length = (codonPos+3) - startPos[0] #find length
                             
                             if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength):
                             # if this is the first stop and no other ORFs have been found, then this is a dangling stop regardless if there's a start codon
@@ -391,7 +391,7 @@ class OrfFinder:
                             
                             if (length > minLength) and (startPos[0] != 0): #check if length of seq meets requirements and if does meet reqs, save info
                                 # if the first element of the start is a 0, that position will be taken care of by the dangling stop
-                                # this makes sure that we don't have any repeats
+                                # make sure that we don't have any repeats
                                 self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
 
                         if (len(startPos)>1): #if there are any other starts, check their lengths too
@@ -401,8 +401,8 @@ class OrfFinder:
 
                         startPos.clear()
                     else:
-                        if startPos: #prevents checking element 0 in List
-                            length = (codonPos+3) - startPos[0] #finds length
+                        if startPos: #prevent checking element 0 in List
+                            length = (codonPos+3) - startPos[0] #find length
                             
                             if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength):
                             # if this is the first stop and no other ORFs have been found, then this is a dangling stop regardless if there's a start codon
@@ -412,7 +412,7 @@ class OrfFinder:
                             elif (length > minLength): #check if length of seq meets requirements and if does meet reqs, save info
                                 self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
 
-                        startPos.clear() #ensures that all starts from this current ORF doesn't interfere with other ORFs
+                        startPos.clear() #ensure that all starts from this current ORF doesn't interfere with other ORFs
             
                     if (not self.orfs[frame]) and (((codonPos+3)-frame) > minLength) and (len(stopPos)==1) and (not startPos):
                     # check if there are no starts, there are no current ORFs, this is the only stop and meets length reqs then this is a dangling stop as well
