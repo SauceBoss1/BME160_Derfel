@@ -380,8 +380,9 @@ class OrfFinder:
                 
                 if codon in self.stopCodons: #stop codons will go through a series of tests to determine whether or not we have found an ORF
                     stopPos.append(codonPos) #add the current stop to stopPos list
+
                     if not biggestGeneOnly: #enables algorithm for every punitive gene
-                        if startPos: #prevent checking element 0 in List
+                        if startPos: #this prevents en error if no stop codons were found
                             length = (codonPos+3) - startPos[0] #find length
                             
                             if (not self.orfs[frame]) and (len(stopPos)==1) and (codonPos+3 > minLength):
@@ -391,16 +392,17 @@ class OrfFinder:
                             
                             if (length > minLength) and (startPos[0] != 0): #check if length of seq meets requirements and if does meet reqs, save info
                                 # if the first element of the start is a 0, that position will be taken care of by the dangling stop
-                                # make sure that we don't have any repeats
+                                # this makes sure that we don't have any repeats
                                 self.saveOrf(startPos[0] + 1, codonPos+3, length, frame)
 
                         if (len(startPos)>1): #if there are any other starts, check their lengths too
-                            for eachStartPos in range(1,len(startPos)): #this does through the startPos list (except element 0 since that has been accounted for already)
+                            for eachStartPos in range(1,len(startPos)): #this goes through the startPos list (except element 0 since that has been accounted for already)
                                 if (codonPos+3)-startPos[eachStartPos] > minLength:
                                     self.saveOrf(startPos[eachStartPos]+1, codonPos+3, (codonPos+3)-startPos[eachStartPos], frame)
 
                         startPos.clear()
                     else:
+                        #this half of the if/else statment uses an algortihm that only returns the longest gene
                         if startPos: #prevent checking element 0 in List
                             length = (codonPos+3) - startPos[0] #find length
                             
@@ -453,7 +455,7 @@ class OrfFinder:
                 finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}')) 
         
         for frame in range(0,len(bottomStrand)):
-            for validORF in bottomStrand[frame]: #does the samething as the abover for loops except this deals with the reverse strand
+            for validORF in bottomStrand[frame]: #does the same thing as the above for loops except this deals with the reverse strand
                 finalORFs.append((((len(self.seq)-validORF[1])+1), ((len(self.seq)-validORF[0])+1), validORF[2], f'-{validORF[3]}')) #we must adjust reverse orfs into the correct coordinate space
 
         self.orfs=[ [], [], [] ] #makes sure to empty the orf list out for next use of orf algorithm
