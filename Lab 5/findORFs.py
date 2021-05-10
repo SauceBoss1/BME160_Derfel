@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: Sagarika Kannoly (skannoly)
-'''Doc String'''
+'''
+findOrfs.py
+
+Find all possible open reading frames (depending on command-line parameter)
+
+Written by: Derfel Terciano
+
+Summary:
+    Stream in a FastA file into the program and stream out a file with all possible ORFs found
+
+Command-line parameters:
+    * -lG or --longestGene => search for the longest ORFs only
+    * -mG or --minGene => set the minimum gene length of returned ORFs
+    * -s or --start => set the specific start codon(s) to use for algorithm (['ATG'] by default)
+    * -t or --stop => set the specific stop codon(s) to use for algorithm (['TAG','TGA','TAA'] by default)
+'''
 
 #PSEUDO CODE FOR orfFinder METHOD IN sequenceAnalysis.orfFinder
 
@@ -20,14 +35,21 @@
 #
 #       if codon is a stop codon:
 #           append the current position to stopPosition
-#           if startPos is not empty:
-#               if length reqs have been met:
-#                   save current ORF info
-#               if we have shifted frames (i.e not frame 1) and the startPos[0] is the same as the frame:
-#                   save current ORF info that starts at position 1
-#               if multiple starts have been found (only if this option is enabled):
-#                   save ORF info of all of those (from each start to current codonPos)
-#               clear startPos list
+#           if we're finding all punitive gene then use the following in order to find ALL genes:
+#               if startPos is not empty:
+#                   if length reqs have been met:
+#                       save current ORF info
+#                   if this is the first stop we encounter and no other ORFs have been found:
+#                       save current ORF info that starts at position 1
+#                   if multiple starts have been found (only if this option is enabled):
+#                       save ORF info of all of those (from each start to current codonPos) (use a for loop for this)
+#                   clear startPos list
+#           else use the following to find only the longest gene:
+#               if startPos is not empty:
+#                   if this is the first stop:
+#                       assume dangling and save current ORF starting from position 1
+#                   elif (use this in order to prevent running both if statements)
+#                       save ORF info from startPos[0] to current codon POS
 #       if there no other ORFs in the frame (and) there are not starts (and) this is the only stop found:
 #          save ORF info if the len requirements have been met (this is a dangling stop)
 #           clear startPos list
@@ -36,6 +58,8 @@
 #       save ORF if length reqs are met from start pos to the end of the seq
 #   if no ORFs have been found:
 #       save entire length as an ORF since it could be a potential gene candidate
+#
+#
 ##########################################################################################################
 
 
@@ -43,7 +67,6 @@ import sequenceAnalysis
 import sys
 from importlib import reload
 reload(sequenceAnalysis)
-
 
 
 ########################################################################
@@ -91,26 +114,29 @@ class CommandLine() :
 
 
 def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', outFile=''):
-    genome = sequenceAnalysis.FastAreader(inFile)
-    if outFile=='':
-        pass
-    else:
-        file = open(outFile, 'w')
-        sys.stdout = file
+    '''Take in a file and return all the ORFs found in a formatted output'''
 
-    for header, seq in genome.readFasta():  #print a message if the minGene > seq length
-        print(header)
+    genome = sequenceAnalysis.FastAreader(inFile)
+
+    if outFile=='': #if no specifc outFile has been specified use command like STDOUT to create the output file
+        pass
+    else: #if a file has been specified, call use sys.stdout to make create an output file from the program
+        file = open(outFile, 'w') #write the file
+        sys.stdout = file #use sys.stdout to create output file
+
+    for header, seq in genome.readFasta():  #iterate through all genes in FastA file
+        print(header) 
 
         if len(seq) < minGene: #if the minGenelength is bigger than seq length, algorithm will not function properly
             print('The specified minimum gene length is bigger than the length of the sequence.\n\tChange the genelength for this program to work. \n')
         else:
-            orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons)
-            for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True):
-                print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}') #{seq[currentOrf[0]-1:currentOrf[1]]}
+            orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons) #create an ORF object 
+            for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True): #sort by length then by start position
+                print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}')
             print('\n')
 
-    if outFile =='': pass
-    else: file.close()
+    if outFile =='': pass 
+    else: file.close() #if an output file has been specified, then make sure to close all file writing operations
 
 ########################################################################
 # Main
@@ -121,7 +147,7 @@ def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', 
    
 def main(inFile = '', options = None):
     '''
-    Find some genes.  
+    Find some potential open reading frame genes.  
     '''
     thisCommandLine = CommandLine(options)
     ###### replace the code between comments.
@@ -132,7 +158,7 @@ def main(inFile = '', options = None):
     # thisCommandLine.args.minGene is the minimum Gene length to include
     #
     #######
-    fileFormatter(thisCommandLine.args.start, thisCommandLine.args.stop, thisCommandLine.args.minGene, thisCommandLine.args.longestGene, inFile, '')
+    fileFormatter(thisCommandLine.args.start, thisCommandLine.args.stop, thisCommandLine.args.minGene, thisCommandLine.args.longestGene, inFile, '') #this deals with command line communication
     
 if __name__ == "__main__":
-    main() # delete this stuff if running from commandline
+    main()

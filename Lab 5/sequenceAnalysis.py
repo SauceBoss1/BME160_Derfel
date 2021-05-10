@@ -361,7 +361,7 @@ class OrfFinder:
 
     def saveOrf(self, startPos, stopPos, length, frame):
         '''Save ORF start/stop positions, length, and frame'''
-        self.orfs[frame].append((startPos, stopPos, length, frame+1)) #saves specified ORF info
+        self.orfs[frame].append((startPos, stopPos, length, frame+1)) #saves specified ORF info using a tuple
         #ORFs are saved in a tuple with the following order:
         #   startPos, stopPos, length, and frame
 
@@ -433,7 +433,11 @@ class OrfFinder:
 
     #use equation to find the actual starts and stops
     def revCompOrfFinder(self, minLength=100, biggestGeneOnly=False):
-        '''Find all valid ORFs of the reverse complement of the sequence'''
+        '''
+        Find all valid ORFs of the reverse complement of the sequence
+
+        NOTE: the ORF info returned has positioning values that are not adjusted in the same coord space as the top strand
+        '''
         tempString = list(self.seq) #turn the string into a list first
 
         chars = { 'A' : 'T', 'T': 'A', 'C' : 'G', 'G' : 'C'} #characters that get swapped
@@ -446,13 +450,14 @@ class OrfFinder:
     def finalORFlist(self, minLength = 100, biggestGeneOnly=False):
         '''Find the ORFs of the top and bottom strand and its correct codon positions'''
         finalORFs = [] #must be ordered
+        #NOTE: all elements in the final list will be a tuple since they are immmutable (this prevents tampering of ORF data)
 
         topStrand = self.orfFinder(minLength, biggestGeneOnly) #finds top strand orfd
         bottomStrand = self.revCompOrfFinder(minLength, biggestGeneOnly) #finds bottom strand orfs
 
         for frame in range(0,len(topStrand)): 
             for validORF in topStrand[frame]: # due to the nature of the orf list, we must iterate through an advanced list structure and append all orfs found
-                finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}')) 
+                finalORFs.append((validORF[0], validORF[1], validORF[2], f'+{validORF[3]}')) #appends a tuple of the orf info
         
         for frame in range(0,len(bottomStrand)):
             for validORF in bottomStrand[frame]: #does the same thing as the above for loops except this deals with the reverse strand
