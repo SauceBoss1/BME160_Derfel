@@ -329,6 +329,49 @@ class FastAreader :
 
         yield header,sequence
 
+#PSEUDO CODE FOR orfFinder METHOD IN sequenceAnalysis.orfFinder
+
+#########################################################################################################
+#lists that are a MUST: startCodons and stopCodons
+#lists needed: startPosition and StopPosition
+#
+#for frames in frame 1, 2, 3 (this will be used to shift the search by 1 character to the right):
+#   (remember) clear the stopPosition list
+#   for codonPosition from range (frames to the length of the sequence)
+#       codon = extract actual codon nucleotides using codon position       
+#
+#       if codon is a start codon:
+#           append the current codon position
+#
+#
+#       if codon is a stop codon:
+#           append the current position to stopPosition
+#           if we're finding all punitive gene then use the following in order to find ALL genes:
+#               if startPos is not empty:
+#                   if length reqs have been met:
+#                       save current ORF info
+#                   if this is the first stop we encounter and no other ORFs have been found:
+#                       save current ORF info that starts at position 1
+#                   if multiple starts have been found (only if this option is enabled):
+#                       save ORF info of all of those (from each start to current codonPos) (use a for loop for this)
+#                   clear startPos list
+#           else use the following to find only the longest gene:
+#               if startPos is not empty:
+#                   if this is the first stop:
+#                       assume dangling and save current ORF starting from position 1
+#                   elif (use this in order to prevent running both if statements)
+#                       save ORF info from startPos[0] to current codon POS
+#       if there no other ORFs in the frame (and) there are not starts (and) this is the only stop found:
+#          save ORF info if the len requirements have been met (this is a dangling stop)
+#           clear startPos list
+#
+#   if we're at the end, and there is still a start codon:
+#       save ORF if length reqs are met from start pos to the end of the seq
+#   if no ORFs have been found:
+#       save entire length as an ORF since it could be a potential gene candidate
+#
+#
+##########################################################################################################
 class OrfFinder:
     '''
     Find all possible Open Reading Frames.

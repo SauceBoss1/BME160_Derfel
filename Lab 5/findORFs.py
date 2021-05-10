@@ -61,7 +61,20 @@ Command-line parameters:
 #
 #
 ##########################################################################################################
-
+# fileFormatter Pseudocode:
+#     stream FastA file into FastA reader
+#    
+#     use a for loop that returns the header and seq from .readFasa():
+#         print the header
+#
+#         if the seq is smaller that minGene:
+#             notify user
+#         else:
+#             instantiate OrfFinder with seq, start codons, and stop codons
+#             for each ORF in the final ORF list:
+#                 print a formatted ORF output thats sorted by length and then by start position
+##########################################################################################################        
+        
 
 import sequenceAnalysis
 import sys
