@@ -73,6 +73,7 @@ Command-line parameters:
 #             instantiate OrfFinder with seq, start codons, and stop codons
 #             for each ORF in the final ORF list:
 #                 print a formatted ORF output thats sorted by length and then by start position
+# remember to deal with cases where the use wants to specify ouput file in the code rather than commandline
 ##########################################################################################################        
         
 
