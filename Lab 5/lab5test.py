@@ -37,4 +37,3 @@ for orf in sorted(orf1, key=lambda a:(a[2]), reverse= True):
 #print(sequence[75659:75760])
 
 
-
