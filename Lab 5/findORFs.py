@@ -77,7 +77,7 @@ Command-line parameters:
 ##########################################################################################################        
         
 
-import sequenceAnalysis
+import sequenceAnalysis #type: ignore
 import sys
 from importlib import reload
 reload(sequenceAnalysis)
