@@ -7,21 +7,27 @@ from sequenceAnalysis import FastAreader #type: ignore
 
 class FindUnique:
     def __init__(self, seq=''):
-        self.seq = seq
-        self.tRnaPowersets =[]
+        self.tRnaInfo ={}
         self.addSeq(seq)
 
-    def addSeq(self,seq):
-        self.seq= seq.upper().replace('-','').replace('_','').replace('.','')
+    def addSeq(self, seq, header):
+        seq= seq.upper().replace('-','').replace('_','').replace('.','')
+        self.tRnaInfo[header] = [seq, self.powerset(self.seq)]
         
-
-    def powerset(self):
+    def powerset(self,inSeq):
         pSet= set()
-        for i in range(len(self.seq)):
-            for j in range(i+1,len(self.seq)+1):
-                pSet.add(self.seq[i:j])
+        for i in range(len(inSeq)):
+            for j in range(i+1,len(inSeq)+1):
+                pSet.add(inSeq[i:j])
         return pSet
-    
+'''
+Design for findUnique
+
+1) input all sequences into class
+2) find power set for all of the tRNA sequences and store it into the class
+3) have a function that takes in a header, and do all the set comparison based on the header and sequence
+4) have the final output be created based on calling the header of each sequence
+'''
             
 ########################################################################
 # Main
