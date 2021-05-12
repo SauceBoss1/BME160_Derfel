@@ -14,8 +14,9 @@ start_time = time.time()
 from sequenceAnalysis import FastAreader #type: ignore
 class FindUnique:
     def __init__(self, header='', seq=''):
-        self.tRnaInfo ={} #the form of the dictionary is in the following => header: [seq, powerset(seq)] 
-        self.headers = []
+        self.tRnaInfo ={} #the form of the dictionary is in the following => header: [seq, powerset(seq)] (this is good for comparing current sets)
+        self.headers = [] #store headers
+        self.allTrnaPset = [] #store all pSets from all 22 sequences (useful for unioning without using for loops)
         self.addSeq(seq, header)    
 
     def addSeq(self, seq, header):
@@ -23,7 +24,9 @@ class FindUnique:
         self.seq= seq.upper().replace('-','').replace('_','').replace('.','')
         if header != '':
             self.headers.append(header)
-            self.tRnaInfo[header] = [self.seq, self.powerset(self.seq)]
+            seqPset = self.powerset(self.seq)
+            self.tRnaInfo[header] = [self.seq, seqPset]
+            self.allTrnaPset.append(seqPset)
 
     def powerset(self,inSeq):
         pSet= set()
@@ -33,11 +36,9 @@ class FindUnique:
         return pSet
 
     def uniqueFinder(self, curHeader):
-        allSets = set()
-        for header, seq in self.tRnaInfo.items():
-            if curHeader != header:
-                allSets = allSets | seq[1]
-        return set(self.tRnaInfo[curHeader][1]) - allSets
+        allSets = self.allTrnaPset.copy()
+        allSets.remove(self.tRnaInfo[curHeader][1])
+        return set(self.tRnaInfo[curHeader][1]) - set().union(*allSets)
 
     def essential(self, curHeader):
         nonEssentials = set()
@@ -71,7 +72,7 @@ class FindUnique:
                         essentialsIndex[indexes] = essentialSubs
                 for index, seq in sorted(essentialsIndex.items(), key = lambda a:a[0]):
                     print(f'{index * "."}{seq}')
-            #print('run time (in seconds) : ', time.time()-start_time) #uncomment this if you want to see the printed run time of the program at the end of output file
+            print('run time (in seconds) : ', time.time()-start_time) #uncomment this if you want to see the printed run time of the program at the end of output file
 
 ########################################################################
 # Main
