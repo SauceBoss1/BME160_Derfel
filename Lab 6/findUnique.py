@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: List full names (CATS usernames) or “None”
+
 # Design for findUnique
 
 # 1) input all sequences into class
