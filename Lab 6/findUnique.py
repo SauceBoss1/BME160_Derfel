@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: List full names (CATS usernames) or “None”
-
+'''NOTES: code runs in 10-11 seconds'''
 # Design for findUnique
 
 # 1) input all sequences into class
@@ -9,6 +9,8 @@
 # 3) have a function that takes in a header, and do all the set comparison based on the header and sequence
 # 4) have the final output be created based on calling the header of each sequence           
 import sys
+import time
+start_time = time.time()
 from sequenceAnalysis import FastAreader #type: ignore
 class FindUnique:
     def __init__(self, header='', seq=''):
@@ -58,7 +60,7 @@ class FindUnique:
         return posFound
     
     def findUnique(self): #problem: some essentials have multiple positions on sequence
-        sys.stdout.reconfigure(encoding='utf8')
+        sys.stdout.reconfigure(encoding='utf-8')
         with sys.stdout as outFile:
             for currentHeader in sorted(self.headers, key = lambda a:a[5:8]): #adjust order of sequences here
                 print(f'{currentHeader}\n{self.tRnaInfo[currentHeader][0]}')
@@ -69,6 +71,7 @@ class FindUnique:
                         essentialsIndex[indexes] = essentialSubs
                 for index, seq in sorted(essentialsIndex.items(), key = lambda a:a[0]):
                     print(f'{index * "."}{seq}')
+            #print('run time (in seconds) : ', time.time()-start_time) #uncomment this if you want to see the printed run time of the program at the end of output file
 
 ########################################################################
 # Main
