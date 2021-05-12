@@ -38,16 +38,16 @@ class FindUnique:
         return set(self.tRnaInfo[curHeader][1]) - allSets
 
     def essential(self, curHeader):
-        nonEssentials = []
-        uniqueSet = list(self.uniqueFinder(curHeader))
+        nonEssentials = set()
+        uniqueSet = self.uniqueFinder(curHeader)
         compareSet = uniqueSet.copy()
         for subset in uniqueSet:
             compareSet.remove(subset)
             for compareSub in compareSet:
                 if compareSub in subset:
-                    nonEssentials.append(subset)
-            compareSet.append(subset)
-        return set(uniqueSet) - set(nonEssentials)
+                    nonEssentials.add(subset)
+            compareSet.add(subset)
+        return set(uniqueSet) - nonEssentials
 
     def findAllOccurances(self, subSeq, mainSeq):
         posFound = []
