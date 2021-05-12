@@ -1,4 +1,4 @@
-import sequenceAnalysis
+import sequenceAnalysis #type: ignore
 from importlib import reload
 reload(sequenceAnalysis)
 
@@ -35,5 +35,5 @@ for orf in sorted(orf1, key=lambda a:(a[2]), reverse= True):
 #print(len(sequence))
 
 #print(sequence[75659:75760])
-
+print(help(sequenceAnalysis.OrfFinder.finalORFlist))
 
