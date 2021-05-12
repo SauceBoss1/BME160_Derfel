@@ -67,7 +67,7 @@ class FindUnique:
             for currentHeader in sorted(self.headers): #adjust order of sequences here  key = lambda a:a[5:8]
                 print(f'{currentHeader}\n{self.tRnaInfo[currentHeader][0]}')
                 essentials = self.essential(currentHeader)
-                essentialsIndex = {}
+                essentialsIndex = {} #in the form of index:essentialSubSequence
                 for essentialSubs in essentials:
                     for indexes in self.findAllOccurances(essentialSubs, self.tRnaInfo[currentHeader][0]):
                         essentialsIndex[indexes] = essentialSubs
