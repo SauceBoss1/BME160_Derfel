@@ -72,7 +72,7 @@ class FindUnique:
                         essentialsIndex[indexes] = essentialSubs
                 for index, seq in sorted(essentialsIndex.items(), key = lambda a:a[0]):
                     print(f'{index * "."}{seq}')
-            print('run time (in seconds) : ', time.time()-start_time) #uncomment this if you want to see the printed run time of the program at the end of output file
+            #print('run time (in seconds) : ', time.time()-start_time) #uncomment this if you want to see the printed run time of the program at the end of output file
 
 ########################################################################
 # Main
