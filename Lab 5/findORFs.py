@@ -146,7 +146,7 @@ def fileFormatter(startCodons, stopCodons, minGene, biggestGeneOnly, inFile='', 
         else:
             orfsFound = sequenceAnalysis.OrfFinder(seq, startCodons, stopCodons) #create an ORF object 
             for currentOrf in sorted(orfsFound.finalORFlist(minGene, biggestGeneOnly), key=lambda a:(a[2],-a[0]), reverse=True): #sort by length then by start position
-                print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:2d}')
+                print(f'{currentOrf[3]:2s} {currentOrf[0]:>5d}..{currentOrf[1]:>5d} {currentOrf[2]:>5d}')
             print('\n')
 
     if outFile =='': pass 
