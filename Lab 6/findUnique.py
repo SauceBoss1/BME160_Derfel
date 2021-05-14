@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: List full names (CATS usernames) or “None”
-'''NOTES: code runs in 10-11 seconds'''
+'''NOTES: code runs in 9-11 seconds'''
 # Design for findUnique
 
 # 1) input all sequences into class
