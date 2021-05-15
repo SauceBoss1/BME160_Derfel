@@ -14,7 +14,7 @@ Class(es)/object(s):
 Assumptions:
     - FastA files are the only files that is to be used
 '''
-import sequenceAnalysis
+import sequenceAnalysis #type: ignore
 import sys
 #from importlib import reload
 #reload(sequenceAnalysis)
