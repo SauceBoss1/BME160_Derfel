@@ -9,6 +9,7 @@
 # 3) have a function that takes in a header, and do all the set comparison based on the header and sequence
 # 4) have the final output be created based on calling the header of each sequence           
 import sys
+import codecs
 import time
 start_time = time.time()
 from sequenceAnalysis import FastAreader #type: ignore
