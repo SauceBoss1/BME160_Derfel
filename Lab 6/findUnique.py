@@ -14,6 +14,7 @@ Summary:
 NOTES:  
     -code runs in 9-11 seconds
     -Unicode character are processed differently on different machines so unicode characters may look different
+    -Without comments, the code is around ~70 lines
 '''
 # Design for findUnique
 
@@ -107,12 +108,6 @@ class FindUnique:
                 for index, seq in sorted(essentialsIndex.items(), key = lambda a:a[0]): #print out the essentialsIndex dictionary
                     print(f'{index * "."}{seq}')
             #print('run time (in seconds) : ', time.time()-start_time) #uncomment this line if you want to see the printed run time of the program at the end of output file
-
-########################################################################
-# Main
-# Here is the main program
-# 
-########################################################################
 
 def main(inCL=None):
     '''Execute main program, stream in file, stream out an output file'''
