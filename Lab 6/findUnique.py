@@ -77,7 +77,7 @@ class FindUnique:
         '''Find all essential subsequences of each tRNA sequence'''
         nonEssentials = set() #we need to make a set of all non-essential and unique subsequences
         uniqueSet = self.uniqueFinder(curHeader) #create a copy of the unique subseqs (this prevents accidental tampering)
-        for rawUnique in uniqueSet:
+        for rawUnique in uniqueSet: #rawUnique is the unique subseq that isn't edited with [:-1] or [1:]
             if (rawUnique[:-1] in uniqueSet) or (rawUnique[1:] in uniqueSet): 
                 #if we remove the ends of the subsequence, we can check if that subtracted subsequence is in the unique set
                 nonEssentials.add(rawUnique)
