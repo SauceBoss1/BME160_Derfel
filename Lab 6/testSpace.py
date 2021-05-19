@@ -53,3 +53,6 @@ def findAllOccurances( subSeq, mainSeq):
         i = mainSeq.find(subSeq, i+1)
     return posFound
 print(str(findAllOccurances('AAAAUA', 'UGGUACUU"GUUUAAAAUAAAAUAAAUGAUUUCGACPCAUUAGAUUAUGAUUUAAUUCAUAAUUACCAACCA')))
+
+emptyObj = FindUnique()
+print(sorted(emptyObj.powerset('ABCDEF')))
