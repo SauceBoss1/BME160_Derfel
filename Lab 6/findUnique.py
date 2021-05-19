@@ -104,7 +104,7 @@ class FindUnique:
                         essentialsIndex[indexes] = essentialSubs #add the occurance and the essential sub to the dinctionary
                 for index, seq in sorted(essentialsIndex.items(), key = lambda a:a[0]): #print out the essentialsIndex dictionary
                     print(f'{index * "."}{seq}')
-            #print('run time (in seconds) : ', time.time()-start_time) #uncomment this line if you want to see the printed run time of the program at the end of output file
+            #print('run time (in seconds) : ', time.time()-start_time) #unc omment this line if you want to see the printed run time of the program at the end of output file
 
 def main(inCL=None):
     '''Execute main program, stream in file, stream out an output file'''
