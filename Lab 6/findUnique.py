@@ -12,7 +12,7 @@ Summary:
     -Stream in a FastA file of all tRNA sequnces and return a formatted output of all the unique and essential subsequence of each sequence
 
 NOTES:  
-    -code runs in 9-11 seconds
+    -code runs in 0.2 seconds
     -Unicode character are processed differently on different machines so unicode characters may look different
     -Without comments, the code is around ~70 lines
 '''
@@ -76,14 +76,10 @@ class FindUnique:
     def essential(self, curHeader):
         '''Find all essential subsequences of each tRNA sequence'''
         nonEssentials = set() #we need to make a set of all non-essential and unique subsequences
-        uniqueSet = self.uniqueFinder(curHeader)
-        compareSet = uniqueSet.copy() #we need 2 identical lists so we can compare which subset is a subseqeunce of another subset
-        for subset in uniqueSet: 
-            compareSet.remove(subset) #we need to TEMPORARILY remove the current subset we are examining or else, we would remove the orginal subset we are exmaining
-            for compareSub in compareSet:
-                if compareSub in subset: #check if the compareSub (the subset we are using to see if this is eseential) is a substring of subset
-                    nonEssentials.add(subset) #add the subset to the nonessentials list if it's a subsequence to compareSub
-            compareSet.add(subset) #add the current subset back to compareSet since we were temporarily removing that sequence
+        uniqueSet = self.uniqueFinder(curHeader) 
+        for rawUnique in uniqueSet:
+            if (rawUnique[:-1] in uniqueSet) or (rawUnique[1:] in uniqueSet):
+                nonEssentials.add(rawUnique)
         return set(uniqueSet) - nonEssentials #remove all nonessentials from the unique set
 
     def findAllOccurances(self, subSeq, mainSeq):

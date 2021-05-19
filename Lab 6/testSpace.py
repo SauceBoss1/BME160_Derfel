@@ -56,3 +56,6 @@ print(str(findAllOccurances('AAAAUA', 'UGGUACUU"GUUUAAAAUAAAAUAAAUGAUUUCGACPCAUU
 
 emptyObj = FindUnique()
 print(sorted(emptyObj.powerset('ABCDEF')))
+
+
+print('hello'[1:])
