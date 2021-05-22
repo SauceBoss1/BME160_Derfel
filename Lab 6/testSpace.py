@@ -59,3 +59,21 @@ print(sorted(emptyObj.powerset('ABCDEF')))
 
 
 print('hello'[1:])
+
+############################################################################
+'''
+How to find program run time
+'''
+
+import time
+start_time = time.time() #initialize a time object (for determing run-time)
+
+def main():
+    '''
+    your lab 6 code goes here
+    '''
+    print('run time : ', time.time()-start_time) # <- put this line right after the last print statment of your program
+
+if __name__ == "__main__":
+    main() 
+############################################################################
