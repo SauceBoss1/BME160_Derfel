@@ -64,8 +64,8 @@ print('hello'[1:])
 '''
 How to find program run time
 '''
-
-import time
+#the 2 lines below goes at the top of the file (after your program docstrings)
+import time 
 start_time = time.time() #initialize a time object (for determing run-time)
 
 def main():
