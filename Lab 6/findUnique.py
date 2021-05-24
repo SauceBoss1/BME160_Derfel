@@ -26,7 +26,7 @@ import sys
 import codecs
 import time
 start_time = time.time() #initialize a time object (for determing run-time)
-from sequenceAnalysis import FastAreader #type: ignore
+from sequenceAnalysis import FastAreader #REMEBER TO HAVE SEQUENCEANALYSIS IN SAME FILE SYSTEM
 
 class FindUnique:
     '''
