@@ -35,7 +35,7 @@ class FastQReader:
 
             sequenceFound = False
             for line in f:
-                if line.startswith('@') and line[1:len(line)].isupper() and qScore != '':
+                if line.startswith('@') and qScore != '':
                     yield header, sequence, qDesc, qScore
                     header = line[1:].rstrip()
                     sequence =''; qDesc = ''; qScore = ''
