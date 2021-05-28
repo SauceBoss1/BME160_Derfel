@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# Name: Derfel Terciano (dtercian)
-# Group Members: Sagarika Kannoly (skannoly)
+# Collaborators: Sagarika Kannoly (skannoly) & Derfel Terciano (dtercian)
 
 
 import sys
