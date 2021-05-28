@@ -31,14 +31,19 @@ class FastQReader:
                 if line.rstrip():
                     lineNum += 1
                     lineNumMod = lineNum % 4 
-                    if lineNumMod == 1:
+                    if lineNumMod == 1 and line.startswith('@'):
                         header = line[1:].rstrip()
                     elif lineNumMod == 2:
                         sequence = line.rstrip().replace('.','N').replace('*', 'N').upper()
-                    elif lineNumMod == 3:
+                    elif lineNumMod == 3 and line.startswith('+'):
                         qDesc = line[1:].rstrip()
                     elif lineNumMod ==0:
                         qScore = line.rstrip()
-                        yield header, sequence, qDesc, qScore
+                        if (u'\x00' in qScore) or (u'\x00' in sequence):
+                            print ('warning bad record', '@'+header, file=sys.stderr)
+                        elif header == '':
+                            print('warning bad read at line:', lineNum , file=sys.stderr)
+                        else:
+                            yield header, sequence, qDesc, qScore
                         header = ''; sequence = ''; qDesc = ''; qScore = ''
                     
