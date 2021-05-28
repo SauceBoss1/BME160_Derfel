@@ -45,5 +45,5 @@ class FastQReader:
                     elif sequence != '':
                         qScore = line.rstrip()
                     else:
-                        sequence = line.rstrip()
+                        sequence = line.rstrip().replace('.', '').replace('*', '').upper()
         yield header, sequence, qDesc, qScore
