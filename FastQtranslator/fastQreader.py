@@ -33,15 +33,18 @@ class FastQReader:
                 line = f.readline()
             header = line[1:].rstrip()
 
+            sequenceFound = False
             for line in f:
                 if line.startswith('@') and line[1:len(line)].isupper() and qScore != '':
                     yield header, sequence, qDesc, qScore
                     header = line[1:].rstrip()
                     sequence =''; qDesc = ''; qScore = ''
+                    sequenceFound = False
                 elif line.startswith('+'):
                     qDesc = line[1:].rstrip()
                 elif (qDesc == '') and (qScore == ''):
                     sequence = line.rstrip().replace('*','N').replace('.', 'N').upper()
-                elif (sequence != '') and (qDesc != ''):
+                    sequenceFound = True
+                elif (sequenceFound) and (qDesc != ''):
                     qScore = line.rstrip()
         yield header, sequence, qDesc, qScore
