@@ -35,7 +35,7 @@ class FastQReader:
                     if lineNumMod == 1:
                         header = line[1:].rstrip()
                     elif lineNumMod == 2:
-                        sequence = line.rstrip()
+                        sequence = line.rstrip().replace('.','N').replace('*', 'N').upper()
                     elif lineNumMod == 3:
                         qDesc = line[1:].rstrip()
                     elif lineNumMod ==0:
