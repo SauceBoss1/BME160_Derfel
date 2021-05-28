@@ -41,7 +41,7 @@ class FastQReader:
                 elif line.startswith('+'):
                     qDesc = line[1:].rstrip()
                 elif (qDesc == '') and (qScore == ''):
-                    sequence = line.rstrip()
+                    sequence = line.rstrip().replace('*','N').replace('.', 'N').upper()
                 elif (sequence != '') and (qDesc != ''):
                     qScore = line.rstrip()
         yield header, sequence, qDesc, qScore
