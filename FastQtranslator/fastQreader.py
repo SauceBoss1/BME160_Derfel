@@ -16,10 +16,10 @@ class FastQReader:
 
     def readFastQ(self):
 
-        # header = ''
-        # sequence = ''
-        # qDesc = ''
-        # qScore = ''
+        header = ''
+        sequence = ''
+        qDesc = ''
+        qScore = ''
 
         with self.doOpen() as f:
             #reset headings
@@ -27,23 +27,21 @@ class FastQReader:
             sequence = ''
             qDesc = ''
             qScore = ''
-
-            #skip to first fastQ header
+            
             line = f.readline()
             while not line.startswith('@'):
                 line = f.readline()
             header = line[1:].rstrip()
 
             for line in f:
-                if line.rstrip():
-                    if line.startswith('@'):
-                        yield header, sequence, qDesc, qScore
-                        header = line[1:].rstrip()
-                        sequence = '' ; qDesc = '' ; qScore = ''
-                    elif line.startswith('+'):
-                        qDesc = line[1:].rstrip()
-                    elif sequence != '':
-                        qScore = line.rstrip()
-                    else:
-                        sequence = line.rstrip().replace('.', '').replace('*', '').upper()
+                if line.startswith('@') and line[1:len(line)].isupper() and qScore != '':
+                    yield header, sequence, qDesc, qScore
+                    header = line[1:].rstrip()
+                    sequence =''; qDesc = ''; qScore = ''
+                elif line.startswith('+'):
+                    qDesc = line[1:].rstrip()
+                elif (qDesc == '') and (qScore == ''):
+                    sequence = line.rstrip()
+                elif (sequence != '') and (qDesc != ''):
+                    qScore = line.rstrip()
         yield header, sequence, qDesc, qScore
