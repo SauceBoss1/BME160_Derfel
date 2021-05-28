@@ -22,29 +22,24 @@ class FastQReader:
         qScore = ''
 
         with self.doOpen() as f:
-            #reset headings
             header = ''
             sequence = ''
             qDesc = ''
             qScore = ''
-            
-            line = f.readline()
-            while not line.startswith('@'):
-                line = f.readline()
-            header = line[1:].rstrip()
 
-            sequenceFound = False
+            lineNum = 0
             for line in f:
-                if line.startswith('@') and qScore != '':
-                    yield header, sequence, qDesc, qScore
-                    header = line[1:].rstrip()
-                    sequence =''; qDesc = ''; qScore = ''
-                    sequenceFound = False
-                elif line.startswith('+'):
-                    qDesc = line[1:].rstrip()
-                elif (qDesc == '') and (qScore == ''):
-                    sequence = line.rstrip().replace('*','N').replace('.', 'N').upper()
-                    sequenceFound = True
-                elif (sequenceFound) and (qDesc != ''):
-                    qScore = line.rstrip()
-        yield header, sequence, qDesc, qScore
+                if line.rstrip():
+                    lineNum += 1
+                    lineNumMod = lineNum % 4 
+                    if lineNumMod == 1:
+                        header = line[1:].rstrip()
+                    elif lineNumMod == 2:
+                        sequence = line.rstrip()
+                    elif lineNumMod == 3:
+                        qDesc = line[1:].rstrip()
+                    elif lineNumMod ==0:
+                        qScore = line.rstrip()
+                        yield header, sequence, qDesc, qScore
+                        header = ''; sequence = ''; qDesc = ''; qScore = ''
+                    
