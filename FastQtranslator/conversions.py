@@ -25,12 +25,15 @@ class PhredConversions:
         self.newSeq = seq #this is only needed if we use B offset
     
     def p33toPhred (self, qScores):
+        '''convert p33 to qScores that range from (0:40)'''
         pass
 
     def p64toPhred (self, qScores):
+        '''convert p64 to qScores that range from (0:40)'''
         pass
     
     def p64bToPhred (self, qScore, seq):
+        '''convert p64b offset to qScores that range from (0:40)'''
         newSeq = seq
         phredQscore = []
         charPos = 0
@@ -44,18 +47,21 @@ class PhredConversions:
         self.orderedQscores = phredQscore
 
     def pSolToPhred (self, qScore):
+        '''convert p64Solexa offset to qScores that range from (0:40)'''
         phredQscore = []
         for char in qScore:
             phredQscore.append(solexaToPhred[ord(char)])
         self.orderedQscores
 
     def toP33 (self):
+        '''convert raw qScores that range from (0:40) to p33'''
         newQScore = ''
         for qScore in self.orderedQscores:
             newQScore += newQScore.join(chr(qScore+33))
         return newQScore
 
     def toP64 (self):
+        '''convert raw qScores that range from (0:40) to p64'''
         newQScore = ''
         for qScore in self.orderedQscores:
             newQScore += newQScore.join(chr(qScore+64))
