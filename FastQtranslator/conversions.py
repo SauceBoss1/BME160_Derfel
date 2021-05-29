@@ -22,7 +22,6 @@ class PhredConversions:
     def __init__(self, qScores, seq, clOut = 'p33'):
         self.clOut = clOut
         self.qScore = qScores
-        self.orderedQscores = []
         self.newSeq = seq #this is only needed if we use B offset
     
     def getNewSeq(self):
