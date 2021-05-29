@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Collaborators: Sagarika Kannoly (skannoly) & Derfel Terciano (dtercian)
 
+'''Read a FastQ file and yield all its fields'''
 
 import sys
 class FastQReader:
