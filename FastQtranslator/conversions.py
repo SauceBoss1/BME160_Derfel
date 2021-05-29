@@ -16,52 +16,55 @@
 #     1) everything (except for Solexa) can be done mathmatically but we may need to make dictionaries if program becomes too slow
 # ########################################
 
-from solexaDictionary import solexaToPhred #remember to have this file in the same folder
+from solexaDictionary import solexaToPhred, asciiToSolexa #remember to have this file in the same folder
 
 class PhredConversions:
-    def __init__(self, qScores, seq):
+    def __init__(self, qScores, seq, clOut = 'p33'):
+        self.clOut = clOut
+        self.qScore = qScores
         self.orderedQscores = []
         self.newSeq = seq #this is only needed if we use B offset
     
-    def p33toPhred (self, qScores):
+    def getNewSeq(self):
+        return self.newSeq
+    
+    def outputConverter (self, clOut):
+        '''Return the p33 or p64 ascii offset'''
+        if clOut == 'p33':
+            return 33
+        elif clOut == 'p64':
+            return 64
+    
+    def p33toPhred (self):
         '''convert p33 to qScores that range from (0:40)'''
         pass
 
-    def p64toPhred (self, qScores):
+    def p64toPhred (self):
         '''convert p64 to qScores that range from (0:40)'''
         pass
     
-    def p64bToPhred (self, qScore, seq):
+    def p64bToPhred (self, clOut = 'p33'):
         '''convert p64b offset to qScores that range from (0:40)'''
-        newSeq = seq
-        phredQscore = []
+        newSeq = self.newSeq
+        phredQscore = ''
         charPos = 0
-        for char in qScore:
+        for char in self.qScore:
             rawQscore = ord(char)-66
-            phredQscore.append(rawQscore)
             if rawQscore == 0:
                 newSeq = newSeq[:charPos] + 'N' + newSeq[charPos+1:]
             charPos += 1
-        self.newSeq = newSeq
-        self.orderedQscores = phredQscore
+            phredQscore += phredQscore.join(chr(rawQscore+self.outputConverter(self.clOut)))
+        return phredQscore, newSeq
 
-    def pSolToPhred (self, qScore):
+    def pSolToPhred (self, clOut = 'p33'):
         '''convert p64Solexa offset to qScores that range from (0:40)'''
-        phredQscore = []
-        for char in qScore:
-            phredQscore.append(solexaToPhred[ord(char)])
-        self.orderedQscores
-
-    def toP33 (self):
-        '''convert raw qScores that range from (0:40) to p33'''
-        newQScore = ''
-        for qScore in self.orderedQscores:
-            newQScore += newQScore.join(chr(qScore+33))
-        return newQScore
-
-    def toP64 (self):
-        '''convert raw qScores that range from (0:40) to p64'''
-        newQScore = ''
-        for qScore in self.orderedQscores:
-            newQScore += newQScore.join(chr(qScore+64))
-        return newQScore
+        phredQscore = ''
+        for char in self.qScore:
+            solQ = ord(char)
+            if solQ >= 64:
+                solQ -= 64
+            else:
+                solQ = asciiToSolexa[solQ]
+            rawQ = solexaToPhred[solQ]
+            phredQscore += phredQscore.join(chr(rawQ+self.outputConverter(self.clOut)))
+        return phredQscore
