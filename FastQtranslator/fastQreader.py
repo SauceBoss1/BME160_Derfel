@@ -38,7 +38,7 @@ class FastQReader:
                         sequence = line.rstrip().replace('.','N').replace('*', 'N').upper()
                     elif lineNumMod == 3 and line.startswith('+'):
                         qDesc = line[1:].rstrip()
-                    elif lineNumMod ==0:
+                    elif lineNumMod == 0:
                         qScore = line.rstrip()
                         if (u'\x00' in qScore) or (u'\x00' in sequence):
                             print ('warning bad record', '@'+header, file=sys.stderr)
