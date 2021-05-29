@@ -19,8 +19,7 @@
 from solexaDictionary import solexaToPhred #remember to have this file in the same folder
 
 class PhredConversions:
-    def __init__(self, qScores, seq, inCl):
-        self.inOptions = ['p33','p64','p64b','pSol'] #list allowed options
+    def __init__(self, qScores, seq):
         self.orderedQscores = []
         self.newSeq = seq #this is only needed if we use B offset
     
