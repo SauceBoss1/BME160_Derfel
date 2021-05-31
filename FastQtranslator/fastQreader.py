@@ -47,4 +47,3 @@ class FastQReader:
                         else:
                             yield header, sequence, qDesc, qScore
                         header = ''; sequence = ''; qDesc = ''; qScore = ''
-                    
