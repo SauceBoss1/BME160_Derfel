@@ -77,5 +77,5 @@ elif thisCL.args.PHRED64SOLinput:
 
 if thisCL.args.PHRED64output:
     print('p64 out')
-else:
+elif thisCL.args.PHRED33output:
     print('p33 out')
