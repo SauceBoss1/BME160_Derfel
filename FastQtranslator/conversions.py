@@ -19,7 +19,7 @@
 from solexaDictionary import solexaToPhred, asciiToSolexa #remember to have this file in the same folder
 
 class PhredConversions:
-    def __init__(self, qScores, seq, clOut = 'p33'):
+    def __init__(self, qScores, seq, clOut = False):
         self.clOut = clOut
         self.qScore = qScores
         self.newSeq = seq #this is only needed if we use B offset
@@ -29,10 +29,10 @@ class PhredConversions:
     
     def outputConverter (self, clOut):
         '''Return the p33 or p64 ascii offset'''
-        if clOut == 'p33':
-            return 33
-        elif clOut == 'p64':
+        if clOut:
             return 64
+        else:
+            return 33
     
     def p33toPhred (self):
         '''convert p33 to qScores that range from (0:40)'''
