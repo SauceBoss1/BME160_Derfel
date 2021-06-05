@@ -57,7 +57,11 @@ class PhredConversions:
         phredQscore = ''
         charPos = 0
         for char in self.qScore:
-            rawQscore = ord(char) - 66
+            if ord(char) == 66:
+                rawQscore = 0
+            else:
+                rawQscore = ord(char) - 64
+
             if rawQscore == 0:
                 newSeq = newSeq[:charPos] + 'N' + newSeq[charPos + 1:]
             charPos += 1
