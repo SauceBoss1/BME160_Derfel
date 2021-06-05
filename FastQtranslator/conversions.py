@@ -73,10 +73,6 @@ class PhredConversions:
         phredQscore = ''
         for char in self.qScore:
             solQ = ord(char)
-            if solQ >= 64:
-                solQ -= 64
-            else:
-                solQ = asciiToSolexa[solQ]
-            rawQ = solexaToPhred[solQ]
+            rawQ = solexaToPhred[asciiToSolexa[solQ]]
             phredQscore += phredQscore.join(chr(rawQ + self.outputConverter(self.clOut)))
         return phredQscore
