@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 # Name: Derfel Terciano (dtercian)
 # Group Members: Sagarika Kannoly (skannoly)
-'''Dictionary for solexa to phred values'''
+'''
+Dictionary for solexa to phred values
+
+Written By: Derfel Terciano & Sagarika Kannoly
+'''
 solexaToPhred = {
     -5:1,
     -4:1,
