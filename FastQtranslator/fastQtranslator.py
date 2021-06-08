@@ -13,7 +13,7 @@ Notes:
     -program can only currently handle outputting to PHRED 64 and PHRED33
     -program run time will be displayed in sys.stderr
 '''
-from conversions import PhredConversions
+from conversions import PhredConversions #remember to also have the solexaDictionary.py file in the same path
 from commandLine import CommandLine
 from fastQreader import FastQReader
 import sys

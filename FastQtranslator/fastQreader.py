@@ -22,7 +22,7 @@ class FastQReader:
         - fastQfile = FastQReader('someFile.fastq')
 
     usage:
-        for header, seq, qDesc, qScore for readFastQ():
+        for header, seq, qDesc, qScore in readFastQ():
             do something
     '''
     def __init__(self, fname = ''):
